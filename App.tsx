@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { User, UserRanking } from './types';
+import { User, UserRanking, QuizAnswers } from './types';
 import { USERS_LIST, ATTRACTIONS } from './constants';
 import { loginUser, logoutUser, getCurrentUser, subscribeToRankings, saveRanking, getUserRanking } from './services/storageService';
 import { RankingList } from './components/RankingList';
 import { GlobalResults } from './components/GlobalResults';
+import { UserProfileQuiz } from './components/UserProfileQuiz';
 import { LogOut, Crown, Loader2, Check, Lock } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -16,6 +17,9 @@ const App: React.FC = () => {
   
   // 'idle' | 'saving' | 'success'
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success'>('idle');
+  
+  // New state for Quiz
+  const [showQuiz, setShowQuiz] = useState(false);
 
   // 1. Initialize Session
   useEffect(() => {
@@ -43,10 +47,11 @@ const App: React.FC = () => {
     if (myRanking) {
       setMyOrder(myRanking.rankedAttractionIds);
       setHasVoted(true);
+      setShowQuiz(false);
     } else {
-      // Default order if no vote yet
-      setMyOrder(ATTRACTIONS.map(a => a.id));
+      // IMPORTANT: Pas de vote trouvé -> On déclenche le quiz
       setHasVoted(false);
+      setShowQuiz(true);
     }
   };
 
@@ -63,6 +68,41 @@ const App: React.FC = () => {
     setUser(null);
     setHasVoted(false);
     setView('rank');
+    setShowQuiz(false);
+  };
+
+  const handleQuizSubmit = (answers: QuizAnswers) => {
+    // --- SMART SORT ALGORITHM ---
+    // Give each attraction a score based on answers
+    const scoredAttractions = ATTRACTIONS.map(attr => {
+        let score = 0;
+
+        // 1. Type Preference
+        if (answers.attractionType === 'classic' && (attr.land === 'Fantasyland' || attr.land === 'Adventureland' || attr.intensity === 'Calme')) score += 5;
+        if (answers.attractionType === 'adventure' && (attr.land === 'Frontierland' || attr.name.includes('Star'))) score += 5;
+        if (answers.attractionType === 'thrill' && (attr.intensity === 'Sensations fortes')) score += 10;
+        if (answers.attractionType === 'story' && (attr.intensity === 'Modéré' || attr.intensity === 'Calme')) score += 3;
+
+        // 2. Adrenaline
+        if (answers.adrenalineLevel === 'chill' && attr.intensity === 'Calme') score += 8;
+        if (answers.adrenalineLevel === 'medium' && attr.intensity === 'Modéré') score += 8;
+        if (answers.adrenalineLevel === 'fast' && (attr.intensity === 'Sensations fortes' || attr.intensity === 'Modéré')) score += 5;
+        if (answers.adrenalineLevel === 'extreme' && attr.intensity === 'Sensations fortes') score += 10;
+
+        // 3. Avoidance
+        if (answers.avoidance === 'heights' && (attr.name.includes('Orbitron') || attr.name.includes('Robinson'))) score -= 10;
+        if (answers.avoidance === 'loops' && (attr.name.includes('Indiana') || attr.name.includes('Hyperspace'))) score -= 20;
+        if (answers.avoidance === 'dark' && (attr.name.includes('Phantom') || attr.name.includes('Pirates') || attr.land === 'Fantasyland')) score -= 5;
+
+        return { id: attr.id, score };
+    });
+
+    // Sort by score descending
+    scoredAttractions.sort((a, b) => b.score - a.score);
+
+    const newOrder = scoredAttractions.map(a => a.id);
+    setMyOrder(newOrder);
+    setShowQuiz(false);
   };
 
   const handleSaveRanking = async () => {
@@ -133,6 +173,9 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#FAFAFA] font-sans selection:bg-indigo-100">
+      {/* Quiz Modal */}
+      {showQuiz && <UserProfileQuiz onSubmit={handleQuizSubmit} />}
+
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-b border-slate-100 z-50 h-16 flex items-center">
         <div className="max-w-5xl mx-auto px-4 w-full flex justify-between items-center">

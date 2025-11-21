@@ -7,6 +7,40 @@ export const USERS_LIST = [
   "Raphaël", "Romain", "Ruben", "Sathasivam", "Tiphaine", "William"
 ];
 
+export const QUIZ_DATA = [
+  {
+    id: 'attractionType',
+    question: "Quel type d’attractions Disney t’attire le plus ?",
+    options: [
+      { id: 'classic', label: "Classiques & immersives", desc: "Pirates, Peter Pan, Ratatouille... la magie sans migraine" },
+      { id: 'adventure', label: "Aventure modérée", desc: "Big Thunder Mountain, Star Tours... ça secoue, mais on ressort coiffé" },
+      { id: 'thrill', label: "Sensations fortes", desc: "Space Mountain, Indiana Jones... l’ostéo te remercie déjà" },
+      { id: 'story', label: "Expériences épiques", desc: "Quand tu veux vivre un film plutôt qu’une attraction" },
+      { id: 'unknown', label: "Aucune idée", desc: "Surprends-moi, je signe les yeux fermés" }
+    ]
+  },
+  {
+    id: 'adrenalineLevel',
+    question: "Ton niveau d’adrénaline recherché ?",
+    options: [
+      { id: 'chill', label: "Tranquille", desc: "Je profite du décor — team photos Insta avant tout" },
+      { id: 'medium', label: "Un peu de mouvement", desc: "Le juste milieu, comme une tisane énergisante" },
+      { id: 'fast', label: "Rapide & Intense", desc: "La vie c’est mieux à 70 km/h dans le noir" },
+      { id: 'extreme', label: "Extrême", desc: "Si ça tourne, crie ou explose, je suis dedans" }
+    ]
+  },
+  {
+    id: 'avoidance',
+    question: "Y a-t-il quelque chose que tu préfères éviter ?",
+    options: [
+      { id: 'heights', label: "Hauteurs", desc: "Rester au sol, c’est très bien aussi" },
+      { id: 'loops', label: "Loopings / Inversions", desc: "Mon estomac dit non" },
+      { id: 'dark', label: "Obscurité / Effrayant", desc: "Trop de suspense tue le suspense" },
+      { id: 'none', label: "Rien, je suis partant", desc: "Même pour les files d’attente de 90 min" }
+    ]
+  }
+];
+
 export const WEATHER_FORECAST = [
   { hour: '09h', temp: '2°', condition: 'cloudy', icon: 'cloud' },
   { hour: '10h', temp: '3°', condition: 'cloudy', icon: 'cloud' },
@@ -33,7 +67,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 50, 
     y: 90,
     description: "Faites le tour du Parc Disneyland à bord d'un train à vapeur authentique pour une vue panoramique relaxante.",
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Disneyland_Railroad_Paris_City_Hall.jpg/640px-Disneyland_Railroad_Paris_City_Hall.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1515165592879-1849b88c43e9?auto=format&fit=crop&w=800&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/disneyland-railroad/',
     reviewSummary: "Un incontournable pour se reposer et voir le parc sous un autre angle. Le charme du train à vapeur opère toujours."
@@ -48,7 +82,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 50, 
     y: 82,
     description: "Remontez le temps à bord d'une voiture ancienne, d'un omnibus ou d'un camion de pompiers du début du 20ème siècle.",
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Main_Street_Vehicles_DLP.jpg/640px-Main_Street_Vehicles_DLP.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=800&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/main-street-vehicles/',
     reviewSummary: "Sympa pour remonter Main Street sans marcher. Les conducteurs sont souvent drôles et l'ambiance rétro est top."
@@ -65,7 +99,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 20, 
     y: 60,
     description: "Le train de la mine le plus célèbre de l'Ouest ! Une montagne russe familiale palpitante au cœur d'une mine hantée.",
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Big_Thunder_Mountain_Paris_2013.jpg/640px-Big_Thunder_Mountain_Paris_2013.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1533284106324-2779295538b6?auto=format&fit=crop&w=800&q=80',
     intensity: 'Sensations fortes',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/big-thunder-mountain/',
     reviewSummary: "Le meilleur train de la mine ! Les sensations sont là sans être trop violentes, et le passage sous l'eau est culte."
@@ -80,7 +114,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 15, 
     y: 75,
     description: "Pénétrez dans ce manoir délabré où 999 fantômes vous attendent pour une visite mystérieuse et envoûtante.",
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Phantom_Manor_Disneyland_Paris_2012.jpg/640px-Phantom_Manor_Disneyland_Paris_2012.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1509557965875-b88c8cc2d8b6?auto=format&fit=crop&w=800&q=80',
     intensity: 'Modéré',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/phantom-manor/',
     reviewSummary: "L'ambiance est incroyable dès la file d'attente. Les effets spéciaux sont magnifiques et l'histoire captivante."
@@ -95,7 +129,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 30, 
     y: 65,
     description: "Embarquez pour une croisière majestueuse sur les rivières du Far West à bord d'un vieux bateau à aubes.",
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Molly_Brown_Riverboat_Disneyland_Paris.jpg/640px-Molly_Brown_Riverboat_Disneyland_Paris.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1553853129-778c5d22d9f0?auto=format&fit=crop&w=800&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/thunder-mesa-riverboat-landing/',
     reviewSummary: "Une balade très apaisante avec de superbes vues inédites sur Big Thunder Mountain. Idéal pour faire une pause."
@@ -112,7 +146,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 15, 
     y: 45,
     description: "Embarquez pour une croisière au temps des pirates, rythmée par la célèbre chanson 'Yo Ho, Yo Ho'.",
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Pirates_of_the_Caribbean_Disneyland_Paris_Entrance.jpg/640px-Pirates_of_the_Caribbean_Disneyland_Paris_Entrance.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1524729485234-e0f64c50515f?auto=format&fit=crop&w=800&q=80',
     intensity: 'Modéré',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/pirates-of-the-caribbean/',
     reviewSummary: "L'immersion est totale, on a vraiment l'impression d'y être. La petite chute surprend toujours agréablement !"
@@ -127,7 +161,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 10, 
     y: 35,
     description: "Une aventure trépidante en wagonnet à travers des ruines antiques, incluant un looping impressionnant.",
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Indiana_Jones_et_le_Temple_du_P%C3%A9ril_03.jpg/640px-Indiana_Jones_et_le_Temple_du_P%C3%A9ril_03.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1599552683573-9dc48255b7ef?auto=format&fit=crop&w=800&q=80',
     intensity: 'Sensations fortes',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/indiana-jones-and-the-temple-of-peril/',
     reviewSummary: "Ça secoue beaucoup, attention aux oreilles ! Le looping est sympa mais le tour est vraiment très court."
@@ -142,7 +176,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 25, 
     y: 45,
     description: "Grimpez au sommet de cet arbre gigantesque pour explorer la maison naufragée de la famille Suisse Robinson.",
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/La_Cabane_des_Robinson_Disneyland_Paris.jpg/640px-La_Cabane_des_Robinson_Disneyland_Paris.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1520965372682-94968f54c15d?auto=format&fit=crop&w=800&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/la-cabane-des-robinson/',
     reviewSummary: "Beaucoup de marches à monter, mais la vue en haut est imprenable. Les détails de la reconstitution sont bluffants."
@@ -157,7 +191,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 20, 
     y: 40,
     description: "Une promenade à pied à travers des scènes miniatures recréant l'histoire d'Aladdin.",
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Le_Passage_Enchant%C3%A9_d%27Aladdin.jpg/640px-Le_Passage_Enchant%C3%A9_d%27Aladdin.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1570633309334-41df9008019c?auto=format&fit=crop&w=800&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/le-passage-enchante-d-aladdin/',
     reviewSummary: "Petit parcours à pied très mignon, fait en 5 minutes. Les scènes miniatures sont jolies mais ce n'est pas incontournable."
@@ -174,7 +208,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 50, 
     y: 55,
     description: "Osez vous aventurer sous le Château pour réveiller un immense dragon audio-animatronic assoupi.",
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/La_Tani%C3%A8re_du_Dragon_Disneyland_Paris.jpg/640px-La_Tani%C3%A8re_du_Dragon_Disneyland_Paris.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1580136608027-928a78eb4a59?auto=format&fit=crop&w=800&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/la-taniere-du-dragon/',
     reviewSummary: "Impressionnant de réalisme ! Il fait sombre et le dragon peut effrayer les tout-petits, mais c'est une pépite cachée."
@@ -189,7 +223,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 40, 
     y: 35,
     description: "Envolez-vous au-dessus des toits de Londres à bord d'un galion pirate magique direction le Pays Imaginaire.",
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Peter_Pan%27s_Flight_Disneyland_Paris_Entrance.jpg/640px-Peter_Pan%27s_Flight_Disneyland_Paris_Entrance.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=800&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/peter-pans-flight/',
     reviewSummary: "Absolument magique, la sensation de vol est unique. Dommage que ce soit si court pour autant d'attente."
@@ -204,7 +238,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 65, 
     y: 25,
     description: "La croisière la plus joyeuse du monde ! Un voyage musical autour du globe avec des poupées chantantes.",
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/It%27s_a_Small_World_Disneyland_Paris_Facade.jpg/640px-It%27s_a_Small_World_Disneyland_Paris_Facade.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1533310209091-0c14f55c3448?auto=format&fit=crop&w=800&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/its-a-small-world/',
     reviewSummary: "La musique reste dans la tête toute la journée ! C'est coloré, joyeux et assez long, parfait pour les enfants."
@@ -219,7 +253,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 55, 
     y: 30,
     description: "Prenez de la hauteur à dos d'éléphant dans ce manège aérien classique qui ravira petits et grands.",
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Dumbo_the_Flying_Elephant_Disneyland_Paris_2011.jpg/640px-Dumbo_the_Flying_Elephant_Disneyland_Paris_2011.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1568627215550-b77642b88c0c?auto=format&fit=crop&w=800&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/dumbo-the-flying-elephant/',
     reviewSummary: "Un grand classique qui offre une jolie vue sur Fantasyland. L'attente est souvent longue pour la durée du tour."
@@ -234,7 +268,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 38, 
     y: 42,
     description: "Revivez l'histoire de Blanche-Neige dans un parcours scénique, mais attention à la méchante sorcière !",
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Blanche-Neige_et_les_Sept_Nains_Disneyland_Paris_Entrance.jpg/640px-Blanche-Neige_et_les_Sept_Nains_Disneyland_Paris_Entrance.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1518994610888-091220084b7d?auto=format&fit=crop&w=800&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/blanche-neige-et-les-sept-nains/',
     reviewSummary: "Un peu effrayant pour les très jeunes enfants à cause de la sorcière, mais très fidèle au dessin animé."
@@ -249,7 +283,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 42, 
     y: 42,
     description: "Accompagnez Pinocchio dans ses aventures mouvementées, de Stromboli à l'île aux plaisirs.",
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Les_Voyages_de_Pinocchio_Disneyland_Paris.jpg/640px-Les_Voyages_de_Pinocchio_Disneyland_Paris.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1535581652167-4d66e2b613eb?auto=format&fit=crop&w=800&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/les-voyages-de-pinocchio/',
     reviewSummary: "Similaire à Blanche-Neige, c'est un parcours rapide. Les décors sont jolis et l'histoire bien racontée."
@@ -264,7 +298,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 48, 
     y: 40,
     description: "Montez sur un magnifique cheval de bois dans ce carrousel royal classique au cœur de Fantasyland.",
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Le_Carrousel_de_Lancelot.jpg/640px-Le_Carrousel_de_Lancelot.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1551699720-4805907a971d?auto=format&fit=crop&w=800&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/le-carrousel-de-lancelot/',
     reviewSummary: "Magnifique surtout de nuit quand il est illuminé. Un moment de nostalgie pure pour petits et grands."
@@ -279,7 +313,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 60, 
     y: 40,
     description: "Tournoyez à toute vitesse dans des tasses de thé géantes lors de la fête de non-anniversaire du Chapelier Fou.",
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Mad_Hatter%27s_Tea_Cups_Disneyland_Paris_Roof.jpg/640px-Mad_Hatter%27s_Tea_Cups_Disneyland_Paris_Roof.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1550950502-b015e50d6485?auto=format&fit=crop&w=800&q=80',
     intensity: 'Modéré',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/mad-hatters-tea-cups/',
     reviewSummary: "Ça tourne très vite si on le veut ! Très drôle à faire en groupe pour voir qui résiste le mieux au tournis."
@@ -294,7 +328,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 62, 
     y: 35,
     description: "Perdez-vous dans le labyrinthe de la Reine de Cœur et profitez d'une vue imprenable depuis son château.",
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Alice%27s_Curious_Labyrinth_Castle_Disneyland_Paris.jpg/640px-Alice%27s_Curious_Labyrinth_Castle_Disneyland_Paris.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1612441557370-c46a899400d2?auto=format&fit=crop&w=800&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/alices-curious-labyrinth/',
     reviewSummary: "Super pour laisser courir les enfants. La vue depuis le château de la Reine de Cœur vaut le détour."
@@ -309,7 +343,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 65, 
     y: 30,
     description: "Un petit train rapide qui parcourt le Pays des Contes de Fées. Idéal pour les plus petits.",
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Casey_Jr._Le_Petit_Train_du_Cirque_Disneyland_Paris.jpg/640px-Casey_Jr._Le_Petit_Train_du_Cirque_Disneyland_Paris.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1515266591878-6669963cb651?auto=format&fit=crop&w=800&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/casey-jr-le-petit-train-du-cirque/',
     reviewSummary: "Plus rapide qu'il n'en a l'air ! La musique est entraînante et le tour est sympa, même pour les adultes."
@@ -324,7 +358,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 68, 
     y: 32,
     description: "Une promenade en bateau paisible à travers des villages miniatures tirés des classiques Disney.",
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Le_Pays_des_Contes_de_F%C3%A9es_Disneyland_Paris_Castle.jpg/640px-Le_Pays_des_Contes_de_F%C3%A9es_Disneyland_Paris_Castle.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1566321455367-555451232f8f?auto=format&fit=crop&w=800&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/le-pays-des-contes-de-fees/',
     reviewSummary: "Promenade en bateau très calme, parfaite pour se détendre. Les miniatures sont adorables et bien entretenues."
@@ -341,7 +375,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 85, 
     y: 50,
     description: "Rejoignez l'Alliance Rebelle pour une bataille épique dans l'espace à vitesse lumière.",
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Space_Mountain_Mission_2_Disneyland_Paris.jpg/640px-Space_Mountain_Mission_2_Disneyland_Paris.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80',
     intensity: 'Sensations fortes',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/star-wars-hyperspace-mountain/',
     reviewSummary: "Très intense et rapide ! La musique Star Wars dans les oreilles rend l'expérience vraiment épique."
@@ -356,7 +390,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 90, 
     y: 60,
     description: "Un simulateur de vol 3D imprévisible à travers la galaxie Star Wars. Chaque voyage est unique !",
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Star_Tours_Disneyland_Paris_X-Wing.jpg/640px-Star_Tours_Disneyland_Paris_X-Wing.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80',
     intensity: 'Modéré',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/star-tours-l-aventure-continue/',
     reviewSummary: "Génial car l'histoire change à chaque fois. On ne s'ennuie jamais, et C-3PO est hilarant."
@@ -371,7 +405,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 75, 
     y: 60,
     description: "Aidez Buzz l'Éclair à vaincre Zurg dans ce stand de tir laser interactif où vous marquez des points.",
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Buzz_Lightyear_Laser_Blast_Disneyland_Paris_Entrance.jpg/640px-Buzz_Lightyear_Laser_Blast_Disneyland_Paris_Entrance.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1626298825274-313448855532?auto=format&fit=crop&w=800&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/buzz-lightyear-laser-blast/',
     reviewSummary: "Super fun pour défier ses amis et sa famille. Le système de points rend l'attraction très addictive !"
@@ -386,7 +420,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 80, 
     y: 40,
     description: "Prenez le volant de votre propre voiture futuriste pour une balade sur une autoroute sinueuse.",
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Autopia_Disneyland_Paris_Track.jpg/640px-Autopia_Disneyland_Paris_Track.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1597762308859-c449375dbdc9?auto=format&fit=crop&w=800&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/autopia/',
     reviewSummary: "Les enfants adorent conduire eux-mêmes. Le volant est un peu dur et ça sent l'essence, mais c'est un classique."
@@ -401,7 +435,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 75, 
     y: 50,
     description: "Pilotez votre propre vaisseau spatial rétro-futuriste et contrôlez votre altitude au milieu des planètes.",
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Orbitron_Disneyland_Paris_Night.jpg/640px-Orbitron_Disneyland_Paris_Night.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1454789548728-85d2696cfbaf?auto=format&fit=crop&w=800&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/orbitron/',
     reviewSummary: "Ça donne un peu le vertige ! La vue sur Discoveryland est top, surtout de nuit avec les néons."
@@ -416,7 +450,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 68, 
     y: 48,
     description: "Une expérience cinéma 4D où Donald Duck vous plonge dans les plus grandes chansons Disney.",
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Discoveryland_Theatre_Disneyland_Paris.jpg/640px-Discoveryland_Theatre_Disneyland_Paris.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/mickeys-philharmagic/',
     reviewSummary: "Un film 4D très bien fait, on sent vraiment les odeurs et l'eau. Une excellente surprise souvent méconnue."

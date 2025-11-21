@@ -47,3 +47,10 @@ export interface UserRanking {
 export interface OptimizationResult {
   path: string[]; // List of Attraction IDs in order
 }
+
+// Interface pour les réponses du Quiz
+export interface QuizAnswers {
+  attractionType: string;
+  adrenalineLevel: string;
+  avoidance: string;
+}
