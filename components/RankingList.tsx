@@ -38,6 +38,24 @@ export const RankingList: React.FC<Props> = ({ attractions, currentOrder, onUpda
     dragItem.current = null;
   };
 
+  const handleMoveUp = (index: number) => {
+    if (index === 0) return;
+    const newOrder = [...currentOrder];
+    const item = newOrder[index];
+    newOrder[index] = newOrder[index - 1];
+    newOrder[index - 1] = item;
+    onUpdateOrder(newOrder);
+  };
+
+  const handleMoveDown = (index: number) => {
+    if (index === currentOrder.length - 1) return;
+    const newOrder = [...currentOrder];
+    const item = newOrder[index];
+    newOrder[index] = newOrder[index + 1];
+    newOrder[index + 1] = item;
+    onUpdateOrder(newOrder);
+  };
+
   const handleBubbleToTop = (id: string) => {
     const newOrder = [...currentOrder];
     const index = newOrder.indexOf(id);
@@ -99,6 +117,10 @@ export const RankingList: React.FC<Props> = ({ attractions, currentOrder, onUpda
             onDragStart={handleDragStart}
             onDragEnter={handleDragEnter}
             onDragEnd={handleDragEnd}
+            onMoveUp={() => handleMoveUp(index)}
+            onMoveDown={() => handleMoveDown(index)}
+            isFirst={index === 0}
+            isLast={index === orderedAttractions.length - 1}
           />
         ))}
       </div>

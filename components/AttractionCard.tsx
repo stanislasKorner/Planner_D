@@ -1,16 +1,19 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Attraction } from '../types';
-import { Clock, Gauge, ExternalLink, GripVertical } from 'lucide-react';
+import { Clock, Gauge, ExternalLink, GripVertical, ChevronUp, ChevronDown } from 'lucide-react';
 
 interface Props {
   attraction: Attraction;
   index: number;
-  onMoveUp?: () => void;
-  onMoveDown?: () => void;
   isDraggable?: boolean;
   onDragStart?: (index: number) => void;
   onDragEnter?: (index: number) => void;
   onDragEnd?: () => void;
+  // New props for manual sorting
+  onMoveUp?: () => void;
+  onMoveDown?: () => void;
+  isFirst?: boolean;
+  isLast?: boolean;
 }
 
 export const AttractionCard: React.FC<Props> = ({ 
@@ -19,7 +22,11 @@ export const AttractionCard: React.FC<Props> = ({
   isDraggable = false,
   onDragStart,
   onDragEnter,
-  onDragEnd
+  onDragEnd,
+  onMoveUp,
+  onMoveDown,
+  isFirst = false,
+  isLast = false
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [imgSrc, setImgSrc] = useState(attraction.imageUrl);
@@ -43,6 +50,7 @@ export const AttractionCard: React.FC<Props> = ({
     if (onDragStart) {
       onDragStart(index);
       e.dataTransfer.effectAllowed = "move";
+      // Slight delay to keep the element visible while dragging copy is created
       setTimeout(() => {
         if (cardRef.current) cardRef.current.classList.add('opacity-40', 'scale-95');
       }, 0);
@@ -73,10 +81,10 @@ export const AttractionCard: React.FC<Props> = ({
       onDragEnter={isDraggable ? handleDragEnter : undefined}
       onDragEnd={isDraggable ? handleDragEnd : undefined}
       onDragOver={(e) => e.preventDefault()}
-      className={`group relative flex items-center p-4 bg-white rounded-2xl shadow-sm transition-all duration-300 ${isDraggable ? 'cursor-grab active:cursor-grabbing hover:shadow-md' : ''}`}
+      className={`group relative flex items-center p-3 md:p-4 bg-white rounded-2xl shadow-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:z-10 ${isDraggable ? 'cursor-grab active:cursor-grabbing' : ''}`}
     >
-      {/* Order Number (Minimalist) */}
-      <div className="absolute -left-2 md:-left-4 top-1/2 -translate-y-1/2 w-8 text-center opacity-0 group-hover:opacity-100 transition-opacity md:group-hover:opacity-100">
+      {/* Drag Handle / Number */}
+      <div className="hidden md:flex absolute -left-4 top-1/2 -translate-y-1/2 w-8 text-center opacity-0 group-hover:opacity-100 transition-opacity">
         {isDraggable ? (
            <GripVertical className="mx-auto text-slate-300" size={20} />
         ) : (
@@ -84,24 +92,38 @@ export const AttractionCard: React.FC<Props> = ({
         )}
       </div>
 
-      <div className="flex-shrink-0 relative mr-5">
+      {/* Image with Rank Badge */}
+      <div className="flex-shrink-0 relative mr-3 md:mr-5">
         <img 
           src={imgSrc} 
           alt={attraction.name} 
           onError={handleImageError}
-          className="w-20 h-20 rounded-xl object-cover shadow-sm bg-slate-100"
+          className="w-16 h-16 md:w-20 md:h-20 rounded-xl object-cover shadow-sm bg-slate-100 select-none pointer-events-none"
         />
-        <div className="absolute -top-2 -left-2 w-6 h-6 bg-slate-900 text-white rounded-full flex items-center justify-center text-[10px] font-bold shadow border-2 border-white">
+        <div className="absolute -top-2 -left-2 w-6 h-6 bg-slate-900 text-white rounded-full flex items-center justify-center text-[10px] font-bold shadow border-2 border-white z-10">
             {index + 1}
         </div>
       </div>
 
-      <div className="flex-grow min-w-0 pr-8">
-        <div className="flex items-baseline justify-between mb-1">
-            <h3 className="font-bold text-slate-800 text-base truncate mr-2">{attraction.name}</h3>
+      {/* Content */}
+      <div className="flex-grow min-w-0">
+        <div className="flex items-center mb-1 gap-2">
+            <h3 className="font-bold text-slate-800 text-sm md:text-base truncate leading-tight">{attraction.name}</h3>
+            {/* External Link Inline */}
+            <a 
+                href={attraction.officialUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-slate-300 hover:text-indigo-600 transition-colors flex-shrink-0"
+                title="Site officiel"
+                onMouseDown={(e) => e.stopPropagation()}
+                onClick={(e) => e.stopPropagation()}
+            >
+                <ExternalLink size={14} />
+            </a>
         </div>
         
-        <p className="text-xs text-slate-500 font-medium uppercase tracking-wider mb-2">{attraction.land}</p>
+        <p className="text-[10px] md:text-xs text-slate-500 font-medium uppercase tracking-wider mb-2 truncate">{attraction.land}</p>
         
         <div className="flex flex-wrap gap-2">
           {attraction.avgWait && (
@@ -115,16 +137,27 @@ export const AttractionCard: React.FC<Props> = ({
         </div>
       </div>
 
-      <a 
-        href={attraction.officialUrl} 
-        target="_blank" 
-        rel="noopener noreferrer"
-        className="absolute top-4 right-4 text-slate-300 hover:text-slate-600 transition-colors p-1"
-        onMouseDown={(e) => e.stopPropagation()}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <ExternalLink size={16} />
-      </a>
+      {/* Mobile/Touch Sort Controls */}
+      {isDraggable && (
+          <div className="flex flex-col gap-1 ml-2 pl-2 border-l border-slate-50 shrink-0">
+            <button 
+                onClick={(e) => { e.stopPropagation(); onMoveUp?.(); }} 
+                disabled={isFirst} 
+                className="p-1.5 rounded-full bg-slate-50 hover:bg-indigo-50 text-slate-400 hover:text-indigo-600 disabled:opacity-20 disabled:hover:bg-slate-50 disabled:hover:text-slate-400 transition-colors"
+                title="Monter"
+            >
+                <ChevronUp size={18} />
+            </button>
+            <button 
+                onClick={(e) => { e.stopPropagation(); onMoveDown?.(); }} 
+                disabled={isLast} 
+                className="p-1.5 rounded-full bg-slate-50 hover:bg-indigo-50 text-slate-400 hover:text-indigo-600 disabled:opacity-20 disabled:hover:bg-slate-50 disabled:hover:text-slate-400 transition-colors"
+                title="Descendre"
+            >
+                <ChevronDown size={18} />
+            </button>
+          </div>
+      )}
     </div>
   );
 };

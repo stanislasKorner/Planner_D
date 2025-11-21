@@ -33,7 +33,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 50, 
     y: 85,
     description: "Faites le tour du Parc Disneyland à bord d'un train à vapeur authentique pour une vue panoramique relaxante.",
-    imageUrl: 'https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&w=300&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1515165592879-1849b88c43e9?auto=format&fit=crop&w=600&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/disneyland-railroad/'
   },
@@ -47,7 +47,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 50, 
     y: 80,
     description: "Remontez le temps à bord d'une voiture ancienne, d'un omnibus ou d'un camion de pompiers du début du 20ème siècle.",
-    imageUrl: 'https://images.unsplash.com/photo-1559564477-2e86595b814a?auto=format&fit=crop&w=300&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1495837174058-628aafc7d610?auto=format&fit=crop&w=600&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/main-street-vehicles/'
   },
@@ -63,7 +63,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 25, 
     y: 60,
     description: "Le train de la mine le plus célèbre de l'Ouest ! Une montagne russe familiale palpitante au cœur d'une mine hantée.",
-    imageUrl: 'https://images.unsplash.com/photo-1533613220913-26228d18f216?auto=format&fit=crop&w=300&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1534234828563-025ae73378a2?auto=format&fit=crop&w=600&q=80',
     intensity: 'Sensations fortes',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/big-thunder-mountain/'
   },
@@ -77,7 +77,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 20, 
     y: 65,
     description: "Pénétrez dans ce manoir délabré où 999 fantômes vous attendent pour une visite mystérieuse et envoûtante.",
-    imageUrl: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=300&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1504666149803-99de672122c8?auto=format&fit=crop&w=600&q=80',
     intensity: 'Modéré',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/phantom-manor/'
   },
@@ -91,7 +91,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 30, 
     y: 60,
     description: "Embarquez pour une croisière majestueuse sur les rivières du Far West à bord d'un vieux bateau à aubes.",
-    imageUrl: 'https://images.unsplash.com/photo-1605130284535-11dd9eedc58a?auto=format&fit=crop&w=300&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1548268770-668932f81e0c?auto=format&fit=crop&w=600&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/thunder-mesa-riverboat-landing/'
   },
@@ -107,7 +107,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 20, 
     y: 40,
     description: "Embarquez pour une croisière au temps des pirates, rythmée par la célèbre chanson 'Yo Ho, Yo Ho'.",
-    imageUrl: 'https://images.unsplash.com/photo-1520065786657-b71a007dd8a5?auto=format&fit=crop&w=300&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1625517656760-703b93676e8f?auto=format&fit=crop&w=600&q=80',
     intensity: 'Modéré',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/pirates-of-the-caribbean/'
   },
@@ -121,7 +121,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 15, 
     y: 35,
     description: "Une aventure trépidante en wagonnet à travers des ruines antiques, incluant un looping impressionnant.",
-    imageUrl: 'https://images.unsplash.com/photo-1564357649322-c7ec935726df?auto=format&fit=crop&w=300&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1599552683573-9dc48255b7ef?auto=format&fit=crop&w=600&q=80',
     intensity: 'Sensations fortes',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/indiana-jones-and-the-temple-of-peril/'
   },
@@ -135,7 +135,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 25, 
     y: 45,
     description: "Grimpez au sommet de cet arbre gigantesque pour explorer la maison naufragée de la famille Suisse Robinson.",
-    imageUrl: 'https://images.unsplash.com/photo-1501685532562-aa6846b14a0e?auto=format&fit=crop&w=300&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1501685532562-aa6846b14a0e?auto=format&fit=crop&w=600&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/la-cabane-des-robinson/'
   },
@@ -149,7 +149,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 20, 
     y: 38,
     description: "Une promenade à pied à travers des scènes miniatures recréant l'histoire d'Aladdin.",
-    imageUrl: 'https://images.unsplash.com/photo-1528041119984-da3a9f8d04d1?auto=format&fit=crop&w=300&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1543702419-28da626459e3?auto=format&fit=crop&w=600&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/le-passage-enchante-d-aladdin/'
   },
@@ -165,7 +165,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 50, 
     y: 55,
     description: "Osez vous aventurer sous le Château pour réveiller un immense dragon audio-animatronic assoupi.",
-    imageUrl: 'https://images.unsplash.com/photo-1638628293219-c065073107b0?auto=format&fit=crop&w=300&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1577493340887-b7bfff550145?auto=format&fit=crop&w=600&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/la-taniere-du-dragon/'
   },
@@ -179,7 +179,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 45, 
     y: 45,
     description: "Envolez-vous au-dessus des toits de Londres à bord d'un galion pirate magique direction le Pays Imaginaire.",
-    imageUrl: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=300&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1529753253655-470be9a42781?auto=format&fit=crop&w=600&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/peter-pans-flight/'
   },
@@ -193,7 +193,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 60, 
     y: 35,
     description: "La croisière la plus joyeuse du monde ! Un voyage musical autour du globe avec des poupées chantantes.",
-    imageUrl: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=300&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1515488042361-ee00e0ddd3e4?auto=format&fit=crop&w=600&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/its-a-small-world/'
   },
@@ -207,7 +207,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 50, 
     y: 40,
     description: "Prenez de la hauteur à dos d'éléphant dans ce manège aérien classique qui ravira petits et grands.",
-    imageUrl: 'https://images.unsplash.com/photo-1550951298-5c7b95a66b21?auto=format&fit=crop&w=300&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1516280030429-27679b3dd99d?auto=format&fit=crop&w=600&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/dumbo-the-flying-elephant/'
   },
@@ -221,7 +221,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 42, 
     y: 45,
     description: "Revivez l'histoire de Blanche-Neige dans un parcours scénique, mais attention à la méchante sorcière !",
-    imageUrl: 'https://images.unsplash.com/photo-1519074069444-1ba4fff66d16?auto=format&fit=crop&w=300&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=600&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/blanche-neige-et-les-sept-nains/'
   },
@@ -235,7 +235,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 43, 
     y: 46,
     description: "Accompagnez Pinocchio dans ses aventures mouvementées, de Stromboli à l'île aux plaisirs.",
-    imageUrl: 'https://images.unsplash.com/photo-1545887310-d1c0e9c2e87b?auto=format&fit=crop&w=300&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1580052614034-c55d20bfee8b?auto=format&fit=crop&w=600&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/les-voyages-de-pinocchio/'
   },
@@ -249,7 +249,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 48, 
     y: 48,
     description: "Montez sur un magnifique cheval de bois dans ce carrousel royal classique au cœur de Fantasyland.",
-    imageUrl: 'https://images.unsplash.com/photo-1514314363460-4b36650d4226?auto=format&fit=crop&w=300&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1514314363460-4b36650d4226?auto=format&fit=crop&w=600&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/le-carrousel-de-lancelot/'
   },
@@ -263,7 +263,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 55, 
     y: 45,
     description: "Tournoyez à toute vitesse dans des tasses de thé géantes lors de la fête de non-anniversaire du Chapelier Fou.",
-    imageUrl: 'https://images.unsplash.com/photo-1576608605148-a7b73664df31?auto=format&fit=crop&w=300&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1576608605148-a7b73664df31?auto=format&fit=crop&w=600&q=80',
     intensity: 'Modéré',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/mad-hatters-tea-cups/'
   },
@@ -277,7 +277,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 58, 
     y: 42,
     description: "Perdez-vous dans le labyrinthe de la Reine de Cœur et profitez d'une vue imprenable depuis son château.",
-    imageUrl: 'https://images.unsplash.com/photo-1609707236995-4e57694cc07e?auto=format&fit=crop&w=300&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1609707236995-4e57694cc07e?auto=format&fit=crop&w=600&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/alices-curious-labyrinth/'
   },
@@ -291,7 +291,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 62, 
     y: 30,
     description: "Un petit train rapide qui parcourt le Pays des Contes de Fées. Idéal pour les plus petits.",
-    imageUrl: 'https://images.unsplash.com/photo-1515165592879-1849b88c43e9?auto=format&fit=crop&w=300&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1519867850-74775a87e783?auto=format&fit=crop&w=600&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/casey-jr-le-petit-train-du-cirque/'
   },
@@ -305,7 +305,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 64, 
     y: 32,
     description: "Une promenade en bateau paisible à travers des villages miniatures tirés des classiques Disney.",
-    imageUrl: 'https://images.unsplash.com/photo-1597939135393-97199df58556?auto=format&fit=crop&w=300&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1518129565928-80097e9b4c75?auto=format&fit=crop&w=600&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/le-pays-des-contes-de-fees/'
   },
@@ -321,7 +321,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 75, 
     y: 50,
     description: "Rejoignez l'Alliance Rebelle pour une bataille épique dans l'espace à vitesse lumière.",
-    imageUrl: 'https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?auto=format&fit=crop&w=300&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=600&q=80',
     intensity: 'Sensations fortes',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/star-wars-hyperspace-mountain/'
   },
@@ -335,7 +335,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 80, 
     y: 55,
     description: "Un simulateur de vol 3D imprévisible à travers la galaxie Star Wars. Chaque voyage est unique !",
-    imageUrl: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=300&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1535378437327-b712818f29b1?auto=format&fit=crop&w=600&q=80',
     intensity: 'Modéré',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/star-tours-l-aventure-continue/'
   },
@@ -349,7 +349,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 70, 
     y: 55,
     description: "Aidez Buzz l'Éclair à vaincre Zurg dans ce stand de tir laser interactif où vous marquez des points.",
-    imageUrl: 'https://images.unsplash.com/photo-1563207153-f403bf289096?auto=format&fit=crop&w=300&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1563207153-f403bf289096?auto=format&fit=crop&w=600&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/buzz-lightyear-laser-blast/'
   },
@@ -363,7 +363,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 75, 
     y: 45,
     description: "Prenez le volant de votre propre voiture futuriste pour une balade sur une autoroute sinueuse.",
-    imageUrl: 'https://images.unsplash.com/photo-1548664686-2b3763403202?auto=format&fit=crop&w=300&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1548664686-2b3763403202?auto=format&fit=crop&w=600&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/autopia/'
   },
@@ -377,13 +377,13 @@ export const ATTRACTIONS: Attraction[] = [
     x: 72, 
     y: 52,
     description: "Pilotez votre propre vaisseau spatial rétro-futuriste et contrôlez votre altitude au milieu des planètes.",
-    imageUrl: 'https://images.unsplash.com/photo-1632296457356-e630c34601d6?auto=format&fit=crop&w=300&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1614730341194-75c60791508b?auto=format&fit=crop&w=600&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/orbitron/'
   },
   { 
     id: 'dlp_disc_6', 
-    name: 'Mickey’s PhilharMagic', 
+    name: 'Mickey et son Orchestre PhilharMagique', 
     park: Park.DISNEYLAND, 
     land: Land.DISCOVERYLAND, 
     avgWait: 15, 
@@ -391,7 +391,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 68, 
     y: 48,
     description: "Une expérience cinéma 4D où Donald Duck vous plonge dans les plus grandes chansons Disney.",
-    imageUrl: 'https://images.unsplash.com/photo-1517604931442-71053e3e095c?auto=format&fit=crop&w=300&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1465847899078-b29edd201997?auto=format&fit=crop&w=600&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/mickeys-philharmagic/'
   },

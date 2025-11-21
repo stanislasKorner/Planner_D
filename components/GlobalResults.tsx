@@ -156,7 +156,7 @@ export const GlobalResults: React.FC<Props> = ({ attractions, allRankings, curre
         </div>
 
         {activeTab === 'list' && (
-            <div className="space-y-3 max-w-2xl mx-auto">
+            <div className="space-y-5 max-w-2xl mx-auto">
                 {globalRanking.map((attraction, index) => (
                     <AttractionCard 
                         key={attraction.id}
