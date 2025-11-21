@@ -31,6 +31,7 @@ export interface Attraction {
   description: string;
   intensity: Intensity;
   officialUrl: string;
+  reviewSummary: string; // Résumé avis client
 }
 
 export interface User {

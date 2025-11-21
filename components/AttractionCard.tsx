@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Attraction } from '../types';
-import { Clock, Gauge, ExternalLink, GripVertical, ChevronUp, ChevronDown } from 'lucide-react';
+import { Clock, Gauge, ExternalLink, GripVertical, ChevronUp, ChevronDown, Quote, User } from 'lucide-react';
 
 interface Props {
   attraction: Attraction;
@@ -14,6 +14,8 @@ interface Props {
   onMoveDown?: () => void;
   isFirst?: boolean;
   isLast?: boolean;
+  // Affichage du rang personnel dans la vue globale
+  myRank?: number;
 }
 
 export const AttractionCard: React.FC<Props> = ({ 
@@ -26,7 +28,8 @@ export const AttractionCard: React.FC<Props> = ({
   onMoveUp,
   onMoveDown,
   isFirst = false,
-  isLast = false
+  isLast = false,
+  myRank
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [imgSrc, setImgSrc] = useState(attraction.imageUrl);
@@ -50,7 +53,6 @@ export const AttractionCard: React.FC<Props> = ({
     if (onDragStart) {
       onDragStart(index);
       e.dataTransfer.effectAllowed = "move";
-      // Slight delay to keep the element visible while dragging copy is created
       setTimeout(() => {
         if (cardRef.current) cardRef.current.classList.add('opacity-40', 'scale-95');
       }, 0);
@@ -81,7 +83,7 @@ export const AttractionCard: React.FC<Props> = ({
       onDragEnter={isDraggable ? handleDragEnter : undefined}
       onDragEnd={isDraggable ? handleDragEnd : undefined}
       onDragOver={(e) => e.preventDefault()}
-      className={`group relative flex items-center p-3 md:p-4 bg-white rounded-2xl shadow-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:z-10 ${isDraggable ? 'cursor-grab active:cursor-grabbing' : ''}`}
+      className={`group relative flex items-start p-3 md:p-4 bg-white rounded-2xl shadow-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:z-10 ${isDraggable ? 'cursor-grab active:cursor-grabbing' : ''}`}
     >
       {/* Drag Handle / Number */}
       <div className="hidden md:flex absolute -left-4 top-1/2 -translate-y-1/2 w-8 text-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -93,7 +95,7 @@ export const AttractionCard: React.FC<Props> = ({
       </div>
 
       {/* Image with Rank Badge */}
-      <div className="flex-shrink-0 relative mr-3 md:mr-5">
+      <div className="flex-shrink-0 relative mr-3 md:mr-5 mt-1">
         <img 
           src={imgSrc} 
           alt={attraction.name} 
@@ -109,7 +111,6 @@ export const AttractionCard: React.FC<Props> = ({
       <div className="flex-grow min-w-0">
         <div className="flex items-center mb-1 gap-2">
             <h3 className="font-bold text-slate-800 text-sm md:text-base truncate leading-tight">{attraction.name}</h3>
-            {/* External Link Inline */}
             <a 
                 href={attraction.officialUrl} 
                 target="_blank" 
@@ -125,7 +126,7 @@ export const AttractionCard: React.FC<Props> = ({
         
         <p className="text-[10px] md:text-xs text-slate-500 font-medium uppercase tracking-wider mb-2 truncate">{attraction.land}</p>
         
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 mb-3">
           {attraction.avgWait && (
              <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-slate-50 text-slate-600 text-[10px] font-semibold">
                <Clock size={10} /> {attraction.avgWait} min
@@ -134,12 +135,29 @@ export const AttractionCard: React.FC<Props> = ({
           <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-semibold ${getIntensityColor(attraction.intensity)}`}>
              <Gauge size={10} /> {attraction.intensity}
           </span>
+
+          {/* Badge "Mon Choix" si fourni */}
+          {myRank && (
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-indigo-50 text-indigo-700 text-[10px] font-bold border border-indigo-100">
+               <User size={10} /> Mon choix : #{myRank}
+            </span>
+          )}
+        </div>
+
+        {/* Avis Client - Update: Text 14px, Padding 12px (p-3) */}
+        <div className="relative bg-slate-50 rounded-lg p-3 border border-slate-100 mt-1">
+             <div className="flex gap-3 items-start">
+                <Quote className="text-indigo-300 flex-shrink-0 mt-0.5" size={16} fill="currentColor" />
+                <p className="text-[14px] text-slate-600 leading-snug">
+                    {attraction.reviewSummary}
+                </p>
+             </div>
         </div>
       </div>
 
       {/* Mobile/Touch Sort Controls */}
       {isDraggable && (
-          <div className="flex flex-col gap-1 ml-2 pl-2 border-l border-slate-50 shrink-0">
+          <div className="flex flex-col gap-1 ml-2 pl-2 border-l border-slate-50 shrink-0 self-center">
             <button 
                 onClick={(e) => { e.stopPropagation(); onMoveUp?.(); }} 
                 disabled={isFirst} 

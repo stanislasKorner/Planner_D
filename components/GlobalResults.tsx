@@ -10,14 +10,18 @@ interface Props {
   attractions: Attraction[];
   allRankings: UserRanking[];
   currentUser: string;
+  myOrder: string[]; // Le classement personnel de l'utilisateur courant
 }
 
-export const GlobalResults: React.FC<Props> = ({ attractions, allRankings, currentUser }) => {
+export const GlobalResults: React.FC<Props> = ({ attractions, allRankings, currentUser, myOrder }) => {
   const [activeTab, setActiveTab] = useState<'list' | 'map'>('list');
   const [optimizedPath, setOptimizedPath] = useState<string[]>([]);
   const [isLoadingAI, setIsLoadingAI] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
   const [showResetModal, setShowResetModal] = useState(false);
+  
+  // New state for hover interaction
+  const [hoveredAttractionId, setHoveredAttractionId] = useState<string | null>(null);
 
   const globalRanking = useMemo(() => {
     if (allRankings.length === 0) return [];
@@ -157,14 +161,20 @@ export const GlobalResults: React.FC<Props> = ({ attractions, allRankings, curre
 
         {activeTab === 'list' && (
             <div className="space-y-5 max-w-2xl mx-auto">
-                {globalRanking.map((attraction, index) => (
-                    <AttractionCard 
-                        key={attraction.id}
-                        attraction={attraction}
-                        index={index}
-                        isDraggable={false}
-                    />
-                ))}
+                {globalRanking.map((attraction, index) => {
+                    // Calculer la position de l'utilisateur courant pour cette attraction
+                    const myRank = myOrder.indexOf(attraction.id) + 1;
+
+                    return (
+                        <AttractionCard 
+                            key={attraction.id}
+                            attraction={attraction}
+                            index={index}
+                            isDraggable={false}
+                            myRank={myRank > 0 ? myRank : undefined}
+                        />
+                    );
+                })}
             </div>
         )}
 
@@ -174,12 +184,17 @@ export const GlobalResults: React.FC<Props> = ({ attractions, allRankings, curre
                     <h3 className="font-bold text-slate-900 mb-4 px-2">Ordre de visite</h3>
                     <div className="flex-grow overflow-y-auto pr-2 space-y-2 no-scrollbar">
                         {mapSidebarList.map((attr, idx) => (
-                            <div key={attr.id} className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors group">
-                                <span className="bg-slate-900 text-white font-bold w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-[10px]">
+                            <div 
+                                key={attr.id} 
+                                onMouseEnter={() => setHoveredAttractionId(attr.id)}
+                                onMouseLeave={() => setHoveredAttractionId(null)}
+                                className={`flex items-center gap-3 p-3 rounded-xl transition-colors group cursor-pointer ${hoveredAttractionId === attr.id ? 'bg-indigo-50 border border-indigo-100' : 'hover:bg-slate-50 border border-transparent'}`}
+                            >
+                                <span className={`bg-slate-900 text-white font-bold w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-[10px] transition-transform ${hoveredAttractionId === attr.id ? 'scale-110 bg-indigo-600' : ''}`}>
                                     {idx + 1}
                                 </span>
                                 <div className="min-w-0 flex-grow">
-                                    <p className="text-sm font-bold text-slate-800 truncate">{attr.name}</p>
+                                    <p className={`text-sm font-bold truncate transition-colors ${hoveredAttractionId === attr.id ? 'text-indigo-900' : 'text-slate-800'}`}>{attr.name}</p>
                                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{attr.land}</p>
                                 </div>
                                 <a 
@@ -187,6 +202,7 @@ export const GlobalResults: React.FC<Props> = ({ attractions, allRankings, curre
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="text-slate-300 hover:text-emerald-600 transition-colors opacity-0 group-hover:opacity-100"
+                                    onClick={(e) => e.stopPropagation()}
                                 >
                                     <MapPin size={16} />
                                 </a>
@@ -198,7 +214,8 @@ export const GlobalResults: React.FC<Props> = ({ attractions, allRankings, curre
                 <div className="lg:col-span-8 h-full rounded-3xl overflow-hidden shadow-sm border border-slate-100 bg-slate-50">
                      <MapVisualization 
                         path={optimizedPath.length > 0 ? optimizedPath : topForAI.map(a => a.id)} 
-                        attractions={attractions} 
+                        attractions={attractions}
+                        hoveredId={hoveredAttractionId}
                      />
                 </div>
             </div>

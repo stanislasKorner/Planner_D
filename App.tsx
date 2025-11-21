@@ -4,7 +4,7 @@ import { USERS_LIST, ATTRACTIONS } from './constants';
 import { loginUser, logoutUser, getCurrentUser, subscribeToRankings, saveRanking, getUserRanking } from './services/storageService';
 import { RankingList } from './components/RankingList';
 import { GlobalResults } from './components/GlobalResults';
-import { LogOut, Crown, Loader2, Check } from 'lucide-react';
+import { LogOut, Crown, Loader2, Check, Lock } from 'lucide-react';
 
 const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -12,6 +12,7 @@ const App: React.FC = () => {
   const [myOrder, setMyOrder] = useState<string[]>([]);
   const [allRankings, setAllRankings] = useState<UserRanking[]>([]);
   const [selectedName, setSelectedName] = useState(USERS_LIST[0]);
+  const [hasVoted, setHasVoted] = useState(false);
   
   // 'idle' | 'saving' | 'success'
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success'>('idle');
@@ -41,9 +42,11 @@ const App: React.FC = () => {
     const myRanking = await getUserRanking(name);
     if (myRanking) {
       setMyOrder(myRanking.rankedAttractionIds);
+      setHasVoted(true);
     } else {
       // Default order if no vote yet
       setMyOrder(ATTRACTIONS.map(a => a.id));
+      setHasVoted(false);
     }
   };
 
@@ -58,6 +61,8 @@ const App: React.FC = () => {
   const handleLogout = () => {
     logoutUser();
     setUser(null);
+    setHasVoted(false);
+    setView('rank');
   };
 
   const handleSaveRanking = async () => {
@@ -73,6 +78,7 @@ const App: React.FC = () => {
     try {
       await saveRanking(ranking);
       setSaveStatus('success');
+      setHasVoted(true); // Unlock results
       
       // Reset back to idle after 2 seconds
       setTimeout(() => {
@@ -191,11 +197,31 @@ const App: React.FC = () => {
             </div>
           </>
         ) : (
-            <GlobalResults 
-                attractions={ATTRACTIONS} 
-                allRankings={allRankings} 
-                currentUser={user.name}
-            />
+            /* Global Results View with Access Control */
+            hasVoted ? (
+                <GlobalResults 
+                    attractions={ATTRACTIONS} 
+                    allRankings={allRankings} 
+                    currentUser={user.name}
+                    myOrder={myOrder}
+                />
+            ) : (
+                <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
+                    <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mb-6 shadow-inner">
+                        <Lock className="text-slate-400 w-10 h-10" />
+                    </div>
+                    <h2 className="text-2xl font-black text-slate-900 mb-3">Résultats verrouillés</h2>
+                    <p className="text-slate-500 max-w-md mb-8">
+                        Pour découvrir le classement global de l'équipe et l'itinéraire optimisé, tu dois d'abord soumettre ton propre vote !
+                    </p>
+                    <button 
+                        onClick={() => setView('rank')}
+                        className="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200"
+                    >
+                        Fais ton choix maintenant
+                    </button>
+                </div>
+            )
         )}
       </main>
     </div>
