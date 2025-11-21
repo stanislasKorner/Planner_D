@@ -1,10 +1,11 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { Attraction, UserRanking } from '../types';
+import { USERS_LIST } from '../constants';
 import { optimizeItinerary } from '../services/geminiService';
 import { resetAllRankings } from '../services/storageService';
 import { AttractionCard } from './AttractionCard';
 import { MapVisualization } from './MapVisualization';
-import { Sparkles, MapPin, LayoutList, Trash2, AlertTriangle } from 'lucide-react';
+import { Sparkles, MapPin, LayoutList, Trash2, AlertTriangle, CheckCircle2, XCircle } from 'lucide-react';
 
 interface Props {
   attractions: Attraction[];
@@ -22,6 +23,14 @@ export const GlobalResults: React.FC<Props> = ({ attractions, allRankings, curre
   
   // New state for hover interaction
   const [hoveredAttractionId, setHoveredAttractionId] = useState<string | null>(null);
+
+  // --- CALCUL DES VOTANTS ---
+  const votersList = useMemo(() => {
+    const votedNames = allRankings.map(r => r.userName);
+    const hasVoted = USERS_LIST.filter(u => votedNames.includes(u));
+    const notVoted = USERS_LIST.filter(u => !votedNames.includes(u));
+    return { hasVoted, notVoted };
+  }, [allRankings]);
 
   const globalRanking = useMemo(() => {
     if (allRankings.length === 0) return [];
@@ -126,6 +135,34 @@ export const GlobalResults: React.FC<Props> = ({ attractions, allRankings, curre
 
   return (
     <div className="max-w-6xl mx-auto pb-20 pt-4 relative">
+        {/* --- NEW: VOTERS LIST --- */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-4">
+                <div className="flex items-center gap-2 mb-2 text-emerald-800 font-bold text-sm uppercase tracking-wide">
+                    <CheckCircle2 size={16} /> Ont voté ({votersList.hasVoted.length})
+                </div>
+                <div className="flex flex-wrap gap-2">
+                    {votersList.hasVoted.map(name => (
+                        <span key={name} className="bg-white text-emerald-700 px-2 py-1 rounded-md text-xs font-bold shadow-sm border border-emerald-100">
+                            {name}
+                        </span>
+                    ))}
+                </div>
+            </div>
+            <div className="bg-rose-50 border border-rose-100 rounded-2xl p-4">
+                <div className="flex items-center gap-2 mb-2 text-rose-800 font-bold text-sm uppercase tracking-wide">
+                    <XCircle size={16} /> En attente ({votersList.notVoted.length})
+                </div>
+                <div className="flex flex-wrap gap-2">
+                    {votersList.notVoted.map(name => (
+                        <span key={name} className="bg-white text-rose-700 px-2 py-1 rounded-md text-xs font-bold shadow-sm border border-rose-100 opacity-60">
+                            {name}
+                        </span>
+                    ))}
+                </div>
+            </div>
+        </div>
+
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 px-2">
            <div>
              <div className="flex items-center gap-3">
@@ -140,7 +177,7 @@ export const GlobalResults: React.FC<Props> = ({ attractions, allRankings, curre
                     </button>
                 )}
              </div>
-             <p className="text-slate-500 mt-1 text-sm">{allRankings.length} participants ont voté</p>
+             <p className="text-slate-500 mt-1 text-sm">Classement consolidé de l'équipe</p>
            </div>
            
            <div className="flex bg-slate-100 p-1 rounded-xl mt-4 md:mt-0 self-start">

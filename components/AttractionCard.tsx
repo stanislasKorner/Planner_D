@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Attraction } from '../types';
-import { Clock, Gauge, ExternalLink, GripVertical, ChevronUp, ChevronDown, Quote, User } from 'lucide-react';
+import { Clock, Gauge, ExternalLink, GripVertical, ChevronUp, ChevronDown, Quote, User, Youtube } from 'lucide-react';
 
 interface Props {
   attraction: Attraction;
@@ -109,19 +109,34 @@ export const AttractionCard: React.FC<Props> = ({
 
       {/* Content */}
       <div className="flex-grow min-w-0">
-        <div className="flex items-center mb-1 gap-2">
-            <h3 className="font-bold text-slate-800 text-sm md:text-base truncate leading-tight">{attraction.name}</h3>
-            <a 
-                href={attraction.officialUrl} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-slate-300 hover:text-indigo-600 transition-colors flex-shrink-0"
-                title="Site officiel"
-                onMouseDown={(e) => e.stopPropagation()}
-                onClick={(e) => e.stopPropagation()}
-            >
-                <ExternalLink size={14} />
-            </a>
+        <div className="flex items-center mb-1 gap-2 flex-wrap">
+            <h3 className="font-bold text-slate-800 text-sm md:text-base truncate leading-tight mr-1">{attraction.name}</h3>
+            
+            {/* Liens Externes */}
+            <div className="flex items-center gap-1">
+                <a 
+                    href={attraction.officialUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="p-1 rounded-md hover:bg-slate-100 text-slate-300 hover:text-indigo-600 transition-colors"
+                    title="Site officiel"
+                    onMouseDown={(e) => e.stopPropagation()}
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <ExternalLink size={14} />
+                </a>
+                <a 
+                    href={attraction.youtubeUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="p-1 rounded-md hover:bg-red-50 text-red-200 hover:text-red-600 transition-colors"
+                    title="Voir sur YouTube"
+                    onMouseDown={(e) => e.stopPropagation()}
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <Youtube size={16} />
+                </a>
+            </div>
         </div>
         
         <p className="text-[10px] md:text-xs text-slate-500 font-medium uppercase tracking-wider mb-2 truncate">{attraction.land}</p>
@@ -144,7 +159,7 @@ export const AttractionCard: React.FC<Props> = ({
           )}
         </div>
 
-        {/* Avis Client - Update: Text 14px, Padding 12px (p-3) */}
+        {/* Avis Client */}
         <div className="relative bg-slate-50 rounded-lg p-3 border border-slate-100 mt-1">
              <div className="flex gap-3 items-start">
                 <Quote className="text-indigo-300 flex-shrink-0 mt-0.5" size={16} fill="currentColor" />

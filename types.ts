@@ -31,7 +31,8 @@ export interface Attraction {
   description: string;
   intensity: Intensity;
   officialUrl: string;
-  reviewSummary: string; // Résumé avis client
+  reviewSummary: string;
+  youtubeUrl: string; // Nouveau champ
 }
 
 export interface User {
@@ -40,17 +41,21 @@ export interface User {
 
 export interface UserRanking {
   userName: string;
-  rankedAttractionIds: string[]; // Ordered list of IDs
+  rankedAttractionIds: string[];
   timestamp: number;
 }
 
 export interface OptimizationResult {
-  path: string[]; // List of Attraction IDs in order
+  path: string[];
 }
 
-// Interface pour les réponses du Quiz
 export interface QuizAnswers {
   attractionType: string;
   adrenalineLevel: string;
   avoidance: string;
+}
+
+export interface AttractionConfig {
+  attractionId: string;
+  customImageUrl: string;
 }

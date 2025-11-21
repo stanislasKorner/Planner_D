@@ -4,11 +4,11 @@ import { WEATHER_FORECAST } from '../constants';
 
 const getWeatherIcon = (icon: string, className: string) => {
   switch(icon) {
-    case 'cloud': return <Cloud className={className} />;
-    case 'cloud-rain': return <CloudRain className={className} />;
-    case 'sun': return <Sun className={className} />;
-    case 'cloud-sun': return <CloudSun className={className} />;
-    case 'moon': return <Moon className={className} />;
+    case 'cloud': return <Cloud className={`${className} text-slate-400`} />;
+    case 'cloud-rain': return <CloudRain className={`${className} text-blue-500`} />;
+    case 'sun': return <Sun className={`${className} text-amber-400 fill-amber-400`} />;
+    case 'cloud-sun': return <CloudSun className={`${className} text-orange-400`} />;
+    case 'moon': return <Moon className={`${className} text-indigo-400 fill-indigo-400`} />;
     default: return <Sun className={className} />;
   }
 };
