@@ -38,11 +38,11 @@ export const UserProfileQuiz: React.FC<Props> = ({ onSubmit }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/95 backdrop-blur-md animate-in fade-in duration-300">
-      <div className="w-full max-w-lg bg-white rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300 relative">
+    <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center sm:p-4 bg-slate-900/95 backdrop-blur-md animate-in fade-in duration-300">
+      <div className="w-full sm:max-w-lg bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden animate-in slide-in-from-bottom-10 sm:zoom-in-95 duration-300 relative max-h-[90vh] flex flex-col">
         
         {/* Header / Progress */}
-        <div className="bg-slate-50 p-6 border-b border-slate-100">
+        <div className="bg-slate-50 p-4 sm:p-6 border-b border-slate-100 shrink-0">
           <div className="flex items-center justify-between mb-4">
             <span className="text-xs font-bold text-indigo-600 tracking-wider uppercase">Profil Disney</span>
             <span className="text-xs font-medium text-slate-400">{currentStep + 1} / {QUIZ_DATA.length}</span>
@@ -55,26 +55,26 @@ export const UserProfileQuiz: React.FC<Props> = ({ onSubmit }) => {
           </div>
         </div>
 
-        {/* Content */}
-        <div className="p-6 sm:p-8">
-          <h2 className="text-2xl font-black text-slate-900 mb-6 leading-tight">
+        {/* Content - Scrollable if needed */}
+        <div className="p-4 sm:p-8 overflow-y-auto">
+          <h2 className="text-xl sm:text-2xl font-black text-slate-900 mb-4 sm:mb-6 leading-tight">
             {currentQuestion.question}
           </h2>
 
-          <div className="space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             {currentQuestion.options.map(option => (
               <button
                 key={option.id}
                 onClick={() => handleOptionSelect(option.id)}
-                className="w-full text-left p-4 rounded-xl border-2 border-slate-100 hover:border-indigo-600 hover:bg-indigo-50/50 transition-all group flex items-center justify-between"
+                className="w-full text-left p-3 sm:p-4 rounded-xl border-2 border-slate-100 hover:border-indigo-600 hover:bg-indigo-50/50 transition-all group flex items-center justify-between"
               >
-                <div>
-                  <div className="font-bold text-slate-800 group-hover:text-indigo-900">{option.label}</div>
+                <div className="min-w-0">
+                  <div className="font-bold text-sm sm:text-base text-slate-800 group-hover:text-indigo-900 truncate">{option.label}</div>
                   {option.desc && (
-                    <div className="text-xs text-slate-500 mt-1 group-hover:text-indigo-600/80">{option.desc}</div>
+                    <div className="text-[10px] sm:text-xs text-slate-500 mt-0.5 sm:mt-1 group-hover:text-indigo-600/80 line-clamp-2">{option.desc}</div>
                   )}
                 </div>
-                <div className="w-6 h-6 rounded-full border-2 border-slate-200 flex items-center justify-center group-hover:border-indigo-600 transition-colors">
+                <div className="w-6 h-6 rounded-full border-2 border-slate-200 flex items-center justify-center group-hover:border-indigo-600 transition-colors ml-2 shrink-0">
                     <ArrowRight size={14} className="text-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
               </button>
@@ -82,11 +82,11 @@ export const UserProfileQuiz: React.FC<Props> = ({ onSubmit }) => {
           </div>
 
           {/* Skip Button */}
-          <div className="mt-8 pt-4 border-t border-slate-100 text-center">
+          <div className="mt-6 sm:mt-8 pt-4 border-t border-slate-100 text-center shrink-0 pb-4">
               {!showShame ? (
                   <button 
                     onClick={handleSkip}
-                    className="text-xs font-bold text-slate-400 hover:text-slate-600 underline transition-colors"
+                    className="text-xs font-bold text-slate-400 hover:text-slate-600 underline transition-colors py-2"
                   >
                       Passer (Je suis ennuyeux)
                   </button>

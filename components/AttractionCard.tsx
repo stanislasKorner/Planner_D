@@ -1,6 +1,7 @@
+
 import React, { useRef, useState, useEffect } from 'react';
 import { Attraction } from '../types';
-import { Clock, Gauge, ExternalLink, GripVertical, ChevronUp, ChevronDown, Quote, Youtube, Plus, Trash2, Trophy, Medal, Crown } from 'lucide-react';
+import { Clock, Gauge, ExternalLink, GripVertical, ChevronUp, ChevronDown, Quote, Youtube, Plus, Trash2, Trophy, Medal, Crown, Sparkles } from 'lucide-react';
 
 interface Props {
   attraction: Attraction;
@@ -69,13 +70,13 @@ export const AttractionCard: React.FC<Props> = ({
       if (rank === 2) return <div className="flex flex-col items-center"><Trophy className="text-slate-400 drop-shadow-sm mb-1" size={20} fill="currentColor" /><span className="text-xs font-black text-slate-500">#2</span></div>;
       if (rank === 3) return <div className="flex flex-col items-center"><Trophy className="text-amber-700 drop-shadow-sm mb-1" size={20} fill="currentColor" /><span className="text-xs font-black text-amber-800">#3</span></div>;
       if (rank <= 5) return <div className="flex flex-col items-center"><Medal className="text-indigo-400 mb-1" size={18} /><span className="text-xs font-bold text-indigo-600">#{rank}</span></div>;
-      
       return <span className="text-lg font-black text-slate-400">#{rank}</span>;
   };
 
+  // MODE CATALOGUE (GRILLE)
   if (variant === 'grid') {
     return (
-      <div className="group relative bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow">
+      <div className="group relative bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden flex flex-col h-full transition-all duration-300 hover:shadow-md hover:scale-[1.02] hover:z-10">
         <div className="relative h-32 w-full overflow-hidden">
             <img src={imgSrc} alt={attraction.name} onError={handleImageError} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-80"></div>
@@ -88,10 +89,15 @@ export const AttractionCard: React.FC<Props> = ({
             </button>
         </div>
         <div className="p-3 flex flex-col flex-grow justify-between gap-2">
-            <div className="flex gap-2 flex-wrap">
-                <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${getIntensityColor(attraction.intensity)}`}>{attraction.intensity}</span>
-                {attraction.avgWait !== undefined && <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 font-medium flex items-center gap-1"><Clock size={10} /> {attraction.avgWait} min</span>}
+            <div className="space-y-2">
+                <div className="flex gap-2 flex-wrap">
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${getIntensityColor(attraction.intensity)}`}>{attraction.intensity}</span>
+                    {attraction.aiTags?.map(tag => (
+                        <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 font-medium">{tag}</span>
+                    ))}
+                </div>
             </div>
+            
             <div className="flex gap-3 border-t border-slate-50 pt-2 mt-1 justify-end opacity-60 group-hover:opacity-100 transition-opacity">
                 {attraction.youtubeUrl && <a href={attraction.youtubeUrl} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-red-500"><Youtube size={14} /></a>}
                 <a href={attraction.officialUrl} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-indigo-500"><ExternalLink size={14} /></a>
@@ -101,6 +107,7 @@ export const AttractionCard: React.FC<Props> = ({
     );
   }
 
+  // MODE LISTE (CLASSEMENT)
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
     if (onDragStart) {
       onDragStart(index);
@@ -115,7 +122,7 @@ export const AttractionCard: React.FC<Props> = ({
   };
 
   return (
-    <div ref={cardRef} draggable={isDraggable} onDragStart={isDraggable ? handleDragStart : undefined} onDragEnter={isDraggable ? handleDragEnter : undefined} onDragEnd={isDraggable ? handleDragEnd : undefined} onDragOver={(e) => e.preventDefault()} className={`group relative flex items-start p-3 bg-white rounded-xl shadow-sm border border-slate-100 transition-all duration-200 hover:shadow-md hover:border-indigo-100 ${isDraggable ? 'cursor-grab active:cursor-grabbing' : ''}`}>
+    <div ref={cardRef} draggable={isDraggable} onDragStart={isDraggable ? handleDragStart : undefined} onDragEnter={isDraggable ? handleDragEnter : undefined} onDragEnd={isDraggable ? handleDragEnd : undefined} onDragOver={(e) => e.preventDefault()} className={`group relative flex items-start p-3 bg-white rounded-xl shadow-sm border border-slate-100 transition-all duration-200 hover:shadow-md hover:scale-[1.01] hover:border-indigo-100 ${isDraggable ? 'cursor-grab active:cursor-grabbing' : ''}`}>
       <div className="flex flex-col items-center justify-center mr-3 self-center gap-1 min-w-[40px]">
         {myRank ? renderRankBadge(myRank) : <span className="text-lg font-black text-slate-300">{index + 1}</span>}
         {isDraggable && <GripVertical className="text-slate-200 group-hover:text-slate-400 mt-1 transition-colors" size={14} />}
@@ -141,13 +148,21 @@ export const AttractionCard: React.FC<Props> = ({
             )}
         </div>
         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">{attraction.land}</p>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 mb-1">
              <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold ${getIntensityColor(attraction.intensity)}`}>{attraction.intensity}</span>
-             {attraction.reviewSummary && <span className="hidden sm:inline-flex text-[9px] text-slate-400 italic border-l border-slate-200 pl-2 truncate max-w-[150px]">"{attraction.reviewSummary.substring(0, 40)}..."</span>}
+             {attraction.aiTags?.slice(0, 2).map(tag => (
+                 <span key={tag} className="hidden sm:inline-flex text-[9px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 border border-slate-200">{tag}</span>
+             ))}
         </div>
+        {attraction.aiAnalysis && (
+             <div className="flex items-start gap-1.5 text-[10px] text-slate-500 leading-tight mt-1 p-1.5 bg-indigo-50/50 rounded-lg border border-indigo-50">
+                <Sparkles size={10} className="text-indigo-400 flex-shrink-0 mt-0.5" />
+                <span>{attraction.aiAnalysis}</span>
+             </div>
+        )}
       </div>
       <div className="flex flex-col gap-1 ml-2 pl-2 border-l border-slate-50 shrink-0 self-center">
-        {onRemove && <button onClick={(e) => { e.stopPropagation(); onRemove(); }} className="p-1.5 rounded-lg text-slate-300 hover:bg-red-50 hover:text-red-500 transition-colors mb-1" title="Retirer du classement"><Trash2 size={16} /></button>}
+        {onRemove && <button onClick={(e) => { e.stopPropagation(); onRemove(); }} className="p-1.5 rounded-lg text-slate-300 hover:bg-red-50 hover:text-red-500 transition-colors mb-1" title="Retirer"><Trash2 size={16} /></button>}
         {isDraggable && (
             <div className="flex flex-col md:hidden">
                 <button onClick={(e) => { e.stopPropagation(); onMoveUp?.(); }} disabled={isFirst} className="p-1 text-slate-300 hover:text-indigo-600 disabled:opacity-10"><ChevronUp size={16} /></button>

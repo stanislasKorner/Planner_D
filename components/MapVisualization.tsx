@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Attraction } from '../types';
 import { Map as MapIcon, Satellite, ExternalLink, ZoomIn, ZoomOut, RefreshCcw, Navigation } from 'lucide-react';
 

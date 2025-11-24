@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { User, UserRanking, QuizAnswers, Attraction, AttractionConfig } from './types';
+import { User, UserRanking, QuizAnswers, Attraction, AttractionConfig, AppConfig } from './types';
 import { USERS_LIST, ATTRACTIONS } from './constants';
-import { loginUser, logoutUser, getCurrentUser, subscribeToRankings, saveRanking, getUserRanking, subscribeToAttractionConfigs } from './services/storageService';
+import { loginUser, logoutUser, getCurrentUser, subscribeToRankings, saveRanking, getUserRanking, subscribeToAttractionConfigs, subscribeToAppConfig } from './services/storageService';
 import { RankingList } from './components/RankingList';
 import { GlobalResults } from './components/GlobalResults';
 import { UserProfileQuiz } from './components/UserProfileQuiz';
@@ -14,11 +14,13 @@ const App: React.FC = () => {
   const [myOrder, setMyOrder] = useState<string[]>([]);
   const [allRankings, setAllRankings] = useState<UserRanking[]>([]);
   const [attractionConfigs, setAttractionConfigs] = useState<AttractionConfig[]>([]);
+  const [appConfig, setAppConfig] = useState<AppConfig | null>(null);
   const [selectedName, setSelectedName] = useState(USERS_LIST[0]);
   const [hasVoted, setHasVoted] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success'>('idle');
   const [showQuiz, setShowQuiz] = useState(false);
 
+  // 1. Initialize Session
   useEffect(() => {
     const currentUser = getCurrentUser();
     if (currentUser) {
@@ -27,20 +29,50 @@ const App: React.FC = () => {
     }
   }, []);
 
+  // 2. Subscribe to All Data
   useEffect(() => {
-    const unsubRankings = subscribeToRankings(setAllRankings);
+    const unsubRankings = subscribeToRankings((rankings) => {
+        setAllRankings(rankings);
+        
+        // --- DETECTION DU RESET GLOBAL ---
+        // Si la base est vide (reset admin) ALORS QUE l'utilisateur pensait avoir voté
+        // On le force à revoter
+        if (rankings.length === 0 && hasVoted) {
+            setHasVoted(false);
+            setMyOrder([]);
+            setShowQuiz(true);
+            setView('rank');
+        }
+    });
     const unsubConfigs = subscribeToAttractionConfigs(setAttractionConfigs);
+    const unsubApp = subscribeToAppConfig(setAppConfig);
     return () => {
         unsubRankings();
         unsubConfigs();
+        unsubApp();
     };
-  }, []);
+  }, [hasVoted]); // Dépendance à hasVoted pour réagir au changement d'état
+
+  // 3. Update Page Title & Favicon based on Config
+  useEffect(() => {
+    if (appConfig) {
+        document.title = appConfig.appName;
+        if (appConfig.appIconUrl) {
+            let link = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
+            if (!link) {
+                link = document.createElement('link');
+                link.rel = 'icon';
+                document.getElementsByTagName('head')[0].appendChild(link);
+            }
+            link.href = appConfig.appIconUrl;
+        }
+    }
+  }, [appConfig]);
 
   const mergedAttractions = useMemo(() => {
     return ATTRACTIONS.map(attr => {
         const config = attractionConfigs.find(c => c.attractionId === attr.id);
         let newAttr = { ...attr };
-        
         if (config) {
             if (config.customImageUrl) newAttr.imageUrl = config.customImageUrl;
             if (config.customYoutubeUrl) newAttr.youtubeUrl = config.customYoutubeUrl;
@@ -56,6 +88,7 @@ const App: React.FC = () => {
       setHasVoted(true);
       setShowQuiz(false);
     } else {
+      setMyOrder([]); 
       setHasVoted(false);
       setShowQuiz(true);
     }
@@ -73,6 +106,7 @@ const App: React.FC = () => {
     logoutUser();
     setUser(null);
     setHasVoted(false);
+    setMyOrder([]); 
     setShowQuiz(false);
     setView('rank');
   };
@@ -106,15 +140,21 @@ const App: React.FC = () => {
     }
   };
 
+  const appName = appConfig?.appName || "Korner chez Mickey";
+
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
         <div className="w-full max-w-sm">
           <div className="text-center mb-10">
-             <div className="w-16 h-16 bg-indigo-600 rounded-3xl mx-auto mb-6 flex items-center justify-center shadow-lg shadow-indigo-200">
-                <Crown className="text-white w-8 h-8" />
-             </div>
-             <h1 className="text-2xl font-black text-slate-900 tracking-tight">Korner chez Mickey</h1>
+             {appConfig?.appIconUrl ? (
+                 <img src={appConfig.appIconUrl} alt="Logo" className="w-20 h-20 mx-auto mb-6 rounded-3xl shadow-lg object-cover bg-indigo-600" />
+             ) : (
+                 <div className="w-16 h-16 bg-indigo-600 rounded-3xl mx-auto mb-6 flex items-center justify-center shadow-lg shadow-indigo-200">
+                    <Crown className="text-white w-8 h-8" />
+                 </div>
+             )}
+             <h1 className="text-2xl font-black text-slate-900 tracking-tight">{appName}</h1>
              <p className="text-slate-500 mt-2">Sélectionnez votre profil pour commencer.</p>
           </div>
           <form onSubmit={handleLogin} className="space-y-4">
@@ -144,10 +184,14 @@ const App: React.FC = () => {
       <nav className="fixed top-0 left-0 right-0 bg-indigo-900 text-white shadow-lg z-50 h-16 flex items-center">
         <div className="max-w-5xl mx-auto px-4 w-full flex justify-between items-center">
           <div className="font-black text-lg tracking-tight flex items-center gap-2">
-            <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-               <Crown size={16} className="text-indigo-900" />
-            </div>
-            <span className="hidden sm:inline">Korner chez Mickey</span>
+            {appConfig?.appIconUrl ? (
+                 <img src={appConfig.appIconUrl} alt="Logo" className="w-8 h-8 rounded-lg bg-white object-cover" />
+             ) : (
+                <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+                   <Crown size={16} className="text-indigo-900" />
+                </div>
+             )}
+            <span className="hidden sm:inline">{appName}</span>
           </div>
           
           <div className="flex items-center gap-2">
@@ -210,7 +254,7 @@ const App: React.FC = () => {
         )}
 
         {view === 'admin' && user.name === 'Raphaël' && (
-            <AdminPanel attractions={mergedAttractions} />
+            <AdminPanel attractions={mergedAttractions} currentAppConfig={appConfig || undefined} />
         )}
       </main>
     </div>

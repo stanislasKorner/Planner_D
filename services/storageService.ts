@@ -1,9 +1,10 @@
-import { UserRanking, User, AttractionConfig } from '../types';
+import { UserRanking, User, AttractionConfig, AppConfig } from '../types';
 import { db } from './firebase';
 import { collection, doc, setDoc, getDoc, onSnapshot, getDocs, deleteDoc } from 'firebase/firestore';
 
 const COLLECTION_NAME = 'rankings';
-const CONFIG_COLLECTION = 'attractions_config'; // Nouvelle collection pour les images
+const CONFIG_COLLECTION = 'attractions_config';
+const APP_SETTINGS_COLLECTION = 'app_settings'; // Nouvelle collection
 const CURRENT_USER_KEY = 'disney_current_user';
 
 // --- RANKINGS ---
@@ -53,7 +54,7 @@ export const resetAllRankings = async () => {
   }
 };
 
-// --- ADMIN CONFIG (IMAGES) ---
+// --- ADMIN CONFIG (IMAGES ATTRACTIONS) ---
 
 export const subscribeToAttractionConfigs = (callback: (configs: AttractionConfig[]) => void) => {
   const q = collection(db, CONFIG_COLLECTION);
@@ -72,6 +73,29 @@ export const saveAttractionConfig = async (config: AttractionConfig) => {
     await setDoc(doc(db, CONFIG_COLLECTION, config.attractionId), config);
   } catch (e) {
     console.error("Error saving attraction config:", e);
+    throw e;
+  }
+};
+
+// --- APP SETTINGS (NOM & LOGO) ---
+
+export const subscribeToAppConfig = (callback: (config: AppConfig | null) => void) => {
+  const docRef = doc(db, APP_SETTINGS_COLLECTION, 'general');
+  const unsubscribe = onSnapshot(docRef, (docSnap) => {
+    if (docSnap.exists()) {
+      callback(docSnap.data() as AppConfig);
+    } else {
+      callback(null);
+    }
+  });
+  return unsubscribe;
+};
+
+export const saveAppConfig = async (config: AppConfig) => {
+  try {
+    await setDoc(doc(db, APP_SETTINGS_COLLECTION, 'general'), config);
+  } catch (e) {
+    console.error("Error saving app config:", e);
     throw e;
   }
 };

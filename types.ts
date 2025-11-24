@@ -23,16 +23,19 @@ export interface Attraction {
   name: string;
   park: Park;
   land: Land;
-  avgWait?: number; // in minutes
-  duration?: number; // in minutes
-  x: number; // Map coordinate X (0-100)
-  y: number; // Map coordinate Y (0-100)
+  avgWait?: number;
+  duration?: number;
+  x: number;
+  y: number;
   imageUrl: string;
   description: string;
   intensity: Intensity;
   officialUrl: string;
   reviewSummary: string;
-  youtubeUrl: string; // Nouveau champ
+  youtubeUrl: string;
+  // Nouveaux champs AI
+  aiTags: string[];
+  aiAnalysis: string;
 }
 
 export interface User {
@@ -58,4 +61,10 @@ export interface QuizAnswers {
 export interface AttractionConfig {
   attractionId: string;
   customImageUrl: string;
+  customYoutubeUrl?: string;
+}
+
+export interface AppConfig {
+  appName: string;
+  appIconUrl: string;
 }

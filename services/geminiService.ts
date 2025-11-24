@@ -15,21 +15,15 @@ export const optimizeItinerary = async (
 
     const prompt = `
       You are an expert guide for Disneyland Paris.
-      Goal: Create the most efficient walking path to visit these 15 attractions.
+      Goal: Create the most efficient walking path to visit these attractions.
       
       CRITICAL GEOGRAPHY RULES (Disneyland Paris):
-      1. Entrance is Main Street USA (South).
-      2. From Main Street, usual flow is counter-clockwise: Frontierland -> Adventureland -> Fantasyland -> Discoveryland.
-      3. OR Clockwise: Discoveryland -> Fantasyland -> Adventureland -> Frontierland.
-      4. DO NOT jump back and forth between lands (e.g. Frontierland to Discoveryland then back to Adventureland). Finish one land before moving to the next.
+      1. Start at Main Street USA (South).
+      2. Go clockwise: Frontierland -> Adventureland -> Fantasyland -> Discoveryland.
+      3. Group attractions by land to minimize walking.
       
-      Attractions to visit:
+      Attractions:
       ${attractionListString}
-
-      Instructions:
-      - Reorder the list to minimize walking distance.
-      - Group attractions by Land.
-      - Start with attractions in Main Street or the first land (Frontierland or Discoveryland).
       
       Return strictly JSON:
       { "path": ["id1", "id2", ...] }
@@ -46,7 +40,7 @@ export const optimizeItinerary = async (
             path: {
               type: Type.ARRAY,
               items: { type: Type.STRING },
-              description: "Ordered list of attraction IDs"
+              description: "Ordered IDs"
             }
           },
           required: ["path"]

@@ -67,11 +67,13 @@ export const ATTRACTIONS: Attraction[] = [
     x: 50, 
     y: 90,
     description: "Faites le tour du Parc Disneyland à bord d'un train à vapeur authentique pour une vue panoramique relaxante.",
-    imageUrl: 'https://images.unsplash.com/photo-1562101884-392f53523816?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1562101884-392f53523816?auto=format&fit=crop&w=800&q=80', 
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/disneyland-railroad/',
     youtubeUrl: 'https://www.youtube.com/watch?v=8K4y_Yq0y_4',
-    reviewSummary: "Un incontournable pour se reposer et voir le parc sous un autre angle. Le charme du train à vapeur opère toujours."
+    reviewSummary: "Un incontournable pour se reposer et voir le parc sous un autre angle. Le charme du train à vapeur opère toujours.",
+    aiTags: ["🚂 Vapeur", "👀 Panoramique", "💤 Repos"],
+    aiAnalysis: "Idéal en milieu de journée pour reposer les jambes tout en faisant le tour du parc."
   },
   { 
     id: 'dlp_main_2', 
@@ -87,7 +89,9 @@ export const ATTRACTIONS: Attraction[] = [
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/main-street-vehicles/',
     youtubeUrl: 'https://www.youtube.com/watch?v=1_2_3_4_5',
-    reviewSummary: "Sympa pour remonter Main Street sans marcher. Les conducteurs sont souvent drôles et l'ambiance rétro est top."
+    reviewSummary: "Sympa pour remonter Main Street sans marcher. Les conducteurs sont souvent drôles et l'ambiance rétro est top.",
+    aiTags: ["🚗 Vintage", "📸 Photogénique", "⏱️ Rapide"],
+    aiAnalysis: "Une expérience immersive souvent négligée. À faire le matin pour l'ambiance."
   },
 
   // --- FRONTIERLAND ---
@@ -105,7 +109,9 @@ export const ATTRACTIONS: Attraction[] = [
     intensity: 'Sensations fortes',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/big-thunder-mountain/',
     youtubeUrl: 'https://www.youtube.com/watch?v=3_4_5_6_7',
-    reviewSummary: "Le meilleur train de la mine ! Les sensations sont là sans être trop violentes, et le passage sous l'eau est culte."
+    reviewSummary: "Le meilleur train de la mine ! Les sensations sont là sans être trop violentes, et le passage sous l'eau est culte.",
+    aiTags: ["🎢 Culte", "🏜️ Décors fous", "👨‍👩‍👧‍👦 Familial+"],
+    aiAnalysis: "L'attraction reine du parc. Équilibre parfait entre fun, durée et thématisation."
   },
   { 
     id: 'dlp_3', 
@@ -121,7 +127,9 @@ export const ATTRACTIONS: Attraction[] = [
     intensity: 'Modéré',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/phantom-manor/',
     youtubeUrl: 'https://www.youtube.com/watch?v=5_6_7_8_9',
-    reviewSummary: "L'ambiance est incroyable dès la file d'attente. Les effets spéciaux sont magnifiques et l'histoire captivante."
+    reviewSummary: "L'ambiance est incroyable dès la file d'attente. Les effets spéciaux sont magnifiques et l'histoire captivante.",
+    aiTags: ["👻 Frissons", "📖 Histoire", "🎨 Esthétique"],
+    aiAnalysis: "Un chef-d'œuvre de narration visuelle. Regardez les détails dans la salle de bal !"
   },
   { 
     id: 'dlp_frontier_3', 
@@ -137,7 +145,9 @@ export const ATTRACTIONS: Attraction[] = [
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/thunder-mesa-riverboat-landing/',
     youtubeUrl: 'https://www.youtube.com/watch?v=7_8_9_0_1',
-    reviewSummary: "Une balade très apaisante avec de superbes vues inédites sur Big Thunder Mountain. Idéal pour faire une pause."
+    reviewSummary: "Une balade très apaisante avec de superbes vues inédites sur Big Thunder Mountain. Idéal pour faire une pause.",
+    aiTags: ["⛴️ Croisière", "🧘 Détente", "👀 Vues"],
+    aiAnalysis: "Offre les meilleurs angles de vue pour photographier Big Thunder Mountain."
   },
 
   // --- ADVENTURELAND ---
@@ -155,7 +165,9 @@ export const ATTRACTIONS: Attraction[] = [
     intensity: 'Modéré',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/pirates-of-the-caribbean/',
     youtubeUrl: 'https://www.youtube.com/watch?v=9_0_1_2_3',
-    reviewSummary: "L'immersion est totale, on a vraiment l'impression d'y être. La petite chute surprend toujours agréablement !"
+    reviewSummary: "L'immersion est totale, on a vraiment l'impression d'y être. La petite chute surprend toujours agréablement !",
+    aiTags: ["🏴‍☠️ Immersif", "💧 Eau", "🎵 Musique"],
+    aiAnalysis: "Le classique absolu. À faire absolument pour comprendre l'essence de Disney."
   },
   { 
     id: 'dlp_5', 
@@ -171,7 +183,9 @@ export const ATTRACTIONS: Attraction[] = [
     intensity: 'Sensations fortes',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/indiana-jones-and-the-temple-of-peril/',
     youtubeUrl: 'https://www.youtube.com/watch?v=2_3_4_5_6',
-    reviewSummary: "Ça secoue beaucoup, attention aux oreilles ! Le looping est sympa mais le tour est vraiment très court."
+    reviewSummary: "Ça secoue beaucoup, attention aux oreilles ! Le looping est sympa mais le tour est vraiment très court.",
+    aiTags: ["🎢 Looping", "💥 Intense", "⏱️ Court"],
+    aiAnalysis: "Un shoot d'adrénaline rapide, mais attention, ça secoue fort les vertèbres !"
   },
   { 
     id: 'dlp_adv_3', 
@@ -187,7 +201,9 @@ export const ATTRACTIONS: Attraction[] = [
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/la-cabane-des-robinson/',
     youtubeUrl: 'https://www.youtube.com/watch?v=4_5_6_7_8',
-    reviewSummary: "Beaucoup de marches à monter, mais la vue en haut est imprenable. Les détails de la reconstitution sont bluffants."
+    reviewSummary: "Beaucoup de marches à monter, mais la vue en haut est imprenable. Les détails de la reconstitution sont bluffants.",
+    aiTags: ["🌳 Nature", "🚶‍♂️ Marche", "👀 Panorama"],
+    aiAnalysis: "Une exploration libre avec une vue imprenable sur le parc au sommet."
   },
   { 
     id: 'dlp_adv_4', 
@@ -203,7 +219,9 @@ export const ATTRACTIONS: Attraction[] = [
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/le-passage-enchante-d-aladdin/',
     youtubeUrl: 'https://www.youtube.com/watch?v=6_7_8_9_0',
-    reviewSummary: "Petit parcours à pied très mignon, fait en 5 minutes. Les scènes miniatures sont jolies mais ce n'est pas incontournable."
+    reviewSummary: "Petit parcours à pied très mignon, fait en 5 minutes. Les scènes miniatures sont jolies mais ce n'est pas incontournable.",
+    aiTags: ["🧞‍♂️ Mignon", "🚶‍♂️ Balade", "👶 Tout-petits"],
+    aiAnalysis: "Une petite parenthèse féérique, idéale pour les fans du film Aladdin."
   },
   
   // --- FANTASYLAND ---
@@ -221,7 +239,9 @@ export const ATTRACTIONS: Attraction[] = [
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/la-taniere-du-dragon/',
     youtubeUrl: 'https://www.youtube.com/watch?v=8_9_0_1_2',
-    reviewSummary: "Impressionnant de réalisme ! Il fait sombre et le dragon peut effrayer les tout-petits, mais c'est une pépite cachée."
+    reviewSummary: "Impressionnant de réalisme ! Il fait sombre et le dragon peut effrayer les tout-petits, mais c'est une pépite cachée.",
+    aiTags: ["🐉 Animatronic", "🌑 Sombre", "💎 Caché"],
+    aiAnalysis: "Le plus bel animatronic du parc, caché sous le château. À ne pas rater."
   },
   { 
     id: 'dlp_6', 
@@ -237,7 +257,9 @@ export const ATTRACTIONS: Attraction[] = [
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/peter-pans-flight/',
     youtubeUrl: 'https://www.youtube.com/watch?v=0_1_2_3_4',
-    reviewSummary: "Absolument magique, la sensation de vol est unique. Dommage que ce soit si court pour autant d'attente."
+    reviewSummary: "Absolument magique, la sensation de vol est unique. Dommage que ce soit si court pour autant d'attente.",
+    aiTags: ["✨ Magique", "🧚‍♂️ Aérien", "⌛️ Attente"],
+    aiAnalysis: "La quintessence de la magie Disney. La file d'attente est longue mais le vol au-dessus de Londres est unique."
   },
   { 
     id: 'dlp_7', 
@@ -253,7 +275,9 @@ export const ATTRACTIONS: Attraction[] = [
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/its-a-small-world/',
     youtubeUrl: 'https://www.youtube.com/watch?v=2_3_4_5_6',
-    reviewSummary: "La musique reste dans la tête toute la journée ! C'est coloré, joyeux et assez long, parfait pour les enfants."
+    reviewSummary: "La musique reste dans la tête toute la journée ! C'est coloré, joyeux et assez long, parfait pour les enfants.",
+    aiTags: ["🌍 Voyage", "🎶 Musique", "👶 Culte"],
+    aiAnalysis: "Un hymne à la paix dans le monde. Kitsch pour certains, incontournable pour d'autres."
   },
   { 
     id: 'dlp_8', 
@@ -269,7 +293,9 @@ export const ATTRACTIONS: Attraction[] = [
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/dumbo-the-flying-elephant/',
     youtubeUrl: 'https://www.youtube.com/watch?v=4_5_6_7_8',
-    reviewSummary: "Un grand classique qui offre une jolie vue sur Fantasyland. L'attente est souvent longue pour la durée du tour."
+    reviewSummary: "Un grand classique qui offre une jolie vue sur Fantasyland. L'attente est souvent longue pour la durée du tour.",
+    aiTags: ["🐘 Aérien", "🎡 Classique", "👶 Enfants"],
+    aiAnalysis: "Le manège iconique par excellence. À faire pour la photo et la vue sur le château."
   },
   { 
     id: 'dlp_fan_4', 
@@ -285,7 +311,9 @@ export const ATTRACTIONS: Attraction[] = [
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/blanche-neige-et-les-sept-nains/',
     youtubeUrl: 'https://www.youtube.com/watch?v=6_7_8_9_0',
-    reviewSummary: "Un peu effrayant pour les très jeunes enfants à cause de la sorcière, mais très fidèle au dessin animé."
+    reviewSummary: "Un peu effrayant pour les très jeunes enfants à cause de la sorcière, mais très fidèle au dessin animé.",
+    aiTags: ["🍎 Conte", "👻 Sombre", "⚡️ Rapide"],
+    aiAnalysis: "Un dark ride classique. Attention, certaines scènes peuvent effrayer les plus petits."
   },
   { 
     id: 'dlp_fan_5', 
@@ -301,7 +329,9 @@ export const ATTRACTIONS: Attraction[] = [
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/les-voyages-de-pinocchio/',
     youtubeUrl: 'https://www.youtube.com/watch?v=8_9_0_1_2',
-    reviewSummary: "Similaire à Blanche-Neige, c'est un parcours rapide. Les décors sont jolis et l'histoire bien racontée."
+    reviewSummary: "Similaire à Blanche-Neige, c'est un parcours rapide. Les décors sont jolis et l'histoire bien racontée.",
+    aiTags: ["🤥 Marionnette", "🇮🇹 Conte", "⚡️ Rapide"],
+    aiAnalysis: "Une jolie balade dans l'univers de Pinocchio, avec de beaux décors en bois."
   },
   { 
     id: 'dlp_fan_6', 
@@ -317,7 +347,9 @@ export const ATTRACTIONS: Attraction[] = [
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/le-carrousel-de-lancelot/',
     youtubeUrl: 'https://www.youtube.com/watch?v=0_1_2_3_4',
-    reviewSummary: "Magnifique surtout de nuit quand il est illuminé. Un moment de nostalgie pure pour petits et grands."
+    reviewSummary: "Magnifique surtout de nuit quand il est illuminé. Un moment de nostalgie pure pour petits et grands.",
+    aiTags: ["🎠 Nostalgie", "🐎 Royal", "🌃 Nuit"],
+    aiAnalysis: "Superbe de nuit avec les lumières. Un moment hors du temps."
   },
   { 
     id: 'dlp_fan_7', 
@@ -333,7 +365,9 @@ export const ATTRACTIONS: Attraction[] = [
     intensity: 'Modéré',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/mad-hatters-tea-cups/',
     youtubeUrl: 'https://www.youtube.com/watch?v=2_3_4_5_6',
-    reviewSummary: "Ça tourne très vite si on le veut ! Très drôle à faire en groupe pour voir qui résiste le mieux au tournis."
+    reviewSummary: "Ça tourne très vite si on le veut ! Très drôle à faire en groupe pour voir qui résiste le mieux au tournis.",
+    aiTags: ["☕️ Tournis", "🤪 Fun", "🌈 Coloré"],
+    aiAnalysis: "À éviter après manger ! Mais très drôle si on aime tourner."
   },
   { 
     id: 'dlp_fan_8', 
@@ -349,7 +383,9 @@ export const ATTRACTIONS: Attraction[] = [
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/alices-curious-labyrinth/',
     youtubeUrl: 'https://www.youtube.com/watch?v=4_5_6_7_8',
-    reviewSummary: "Super pour laisser courir les enfants. La vue depuis le château de la Reine de Cœur vaut le détour."
+    reviewSummary: "Super pour laisser courir les enfants. La vue depuis le château de la Reine de Cœur vaut le détour.",
+    aiTags: ["🧩 Labyrinthe", "🏰 Vue", "🚶‍♂️ Plein air"],
+    aiAnalysis: "Parfait pour se dégourdir les jambes. La vue depuis le petit château est top."
   },
   { 
     id: 'dlp_fan_9', 
@@ -365,7 +401,9 @@ export const ATTRACTIONS: Attraction[] = [
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/casey-jr-le-petit-train-du-cirque/',
     youtubeUrl: 'https://www.youtube.com/watch?v=6_7_8_9_0',
-    reviewSummary: "Plus rapide qu'il n'en a l'air ! La musique est entraînante et le tour est sympa, même pour les adultes."
+    reviewSummary: "Plus rapide qu'il n'en a l'air ! La musique est entraînante et le tour est sympa, même pour les adultes.",
+    aiTags: ["🚂 Junior", "💨 Vitesse", "🎵 Entraînant"],
+    aiAnalysis: "Une mini montagne russe très douce, parfaite pour une première expérience."
   },
   { 
     id: 'dlp_fan_10', 
@@ -381,7 +419,9 @@ export const ATTRACTIONS: Attraction[] = [
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/le-pays-des-contes-de-fees/',
     youtubeUrl: 'https://www.youtube.com/watch?v=8_9_0_1_2',
-    reviewSummary: "Promenade en bateau très calme, parfaite pour se détendre. Les miniatures sont adorables et bien entretenues."
+    reviewSummary: "Promenade en bateau très calme, parfaite pour se détendre. Les miniatures sont adorables et bien entretenues.",
+    aiTags: ["🛶 Bateau", "🏠 Miniatures", "🧘 Calme"],
+    aiAnalysis: "L'attraction la plus zen du parc. À faire pour se reposer."
   },
   
   // --- DISCOVERYLAND ---
@@ -399,7 +439,9 @@ export const ATTRACTIONS: Attraction[] = [
     intensity: 'Sensations fortes',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/star-wars-hyperspace-mountain/',
     youtubeUrl: 'https://www.youtube.com/watch?v=0_1_2_3_4',
-    reviewSummary: "Très intense et rapide ! La musique Star Wars dans les oreilles rend l'expérience vraiment épique."
+    reviewSummary: "Très intense et rapide ! La musique Star Wars dans les oreilles rend l'expérience vraiment épique.",
+    aiTags: ["🚀 Espace", "💥 Looping", "🌌 Star Wars"],
+    aiAnalysis: "L'attraction la plus intense du parc Disneyland. Accrochez-vous !"
   },
   { 
     id: 'dlp_10', 
@@ -411,11 +453,13 @@ export const ATTRACTIONS: Attraction[] = [
     x: 90, 
     y: 60,
     description: "Un simulateur de vol 3D imprévisible à travers la galaxie Star Wars. Chaque voyage est unique !",
-    imageUrl: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80',
     intensity: 'Modéré',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/star-tours-l-aventure-continue/',
     youtubeUrl: 'https://www.youtube.com/watch?v=2_3_4_5_6',
-    reviewSummary: "Génial car l'histoire change à chaque fois. On ne s'ennuie jamais, et C-3PO est hilarant."
+    reviewSummary: "Génial car l'histoire change à chaque fois. On ne s'ennuie jamais, et C-3PO est hilarant.",
+    aiTags: ["🤖 3D", "🎲 Aléatoire", "🌌 Star Wars"],
+    aiAnalysis: "Grâce aux scénarios multiples, on peut la refaire plusieurs fois sans voir la même chose."
   },
   { 
     id: 'dlp_11', 
@@ -431,7 +475,9 @@ export const ATTRACTIONS: Attraction[] = [
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/buzz-lightyear-laser-blast/',
     youtubeUrl: 'https://www.youtube.com/watch?v=4_5_6_7_8',
-    reviewSummary: "Super fun pour défier ses amis et sa famille. Le système de points rend l'attraction très addictive !"
+    reviewSummary: "Super fun pour défier ses amis et sa famille. Le système de points rend l'attraction très addictive !",
+    aiTags: ["🔫 Jeu", "🏆 Compétition", "🚀 Toy Story"],
+    aiAnalysis: "Ultra fun en duel. Visez les cibles triangles pour un max de points !"
   },
   { 
     id: 'dlp_disc_4', 
@@ -447,7 +493,9 @@ export const ATTRACTIONS: Attraction[] = [
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/autopia/',
     youtubeUrl: 'https://www.youtube.com/watch?v=6_7_8_9_0',
-    reviewSummary: "Les enfants adorent conduire eux-mêmes. Le volant est un peu dur et ça sent l'essence, mais c'est un classique."
+    reviewSummary: "Les enfants adorent conduire eux-mêmes. Le volant est un peu dur et ça sent l'essence, mais c'est un classique.",
+    aiTags: ["🚗 Conduite", "⛽️ Rétro", "👶 Enfants"],
+    aiAnalysis: "Un classique des parcs Disney. Laissez les enfants conduire !"
   },
   { 
     id: 'dlp_disc_5', 
@@ -463,7 +511,9 @@ export const ATTRACTIONS: Attraction[] = [
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/orbitron/',
     youtubeUrl: 'https://www.youtube.com/watch?v=8_9_0_1_2',
-    reviewSummary: "Ça donne un peu le vertige ! La vue sur Discoveryland est top, surtout de nuit avec les néons."
+    reviewSummary: "Ça donne un peu le vertige ! La vue sur Discoveryland est top, surtout de nuit avec les néons.",
+    aiTags: ["🚀 Aérien", "🪐 Planètes", "👀 Vue"],
+    aiAnalysis: "Similaire à Dumbo mais plus haut et plus rapide. Superbe vue."
   },
   { 
     id: 'dlp_disc_6', 
@@ -479,6 +529,8 @@ export const ATTRACTIONS: Attraction[] = [
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/mickeys-philharmagic/',
     youtubeUrl: 'https://www.youtube.com/watch?v=0_1_2_3_4',
-    reviewSummary: "Un film 4D très bien fait, on sent vraiment les odeurs et l'eau. Une excellente surprise souvent méconnue."
+    reviewSummary: "Un film 4D très bien fait, on sent vraiment les odeurs et l'eau. Une excellente surprise souvent méconnue.",
+    aiTags: ["🎬 Cinéma 4D", "🎵 Chansons", "✨ Magie"],
+    aiAnalysis: "Un spectacle assis très immersif, parfait pour une pause climatique."
   },
 ];
