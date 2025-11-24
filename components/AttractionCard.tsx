@@ -1,32 +1,36 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Attraction } from '../types';
-import { Clock, Gauge, ExternalLink, GripVertical, ChevronUp, ChevronDown, Quote, User, Youtube } from 'lucide-react';
+import { Clock, Gauge, ExternalLink, GripVertical, ChevronUp, ChevronDown, Quote, Youtube, Plus, Trash2, MapPin } from 'lucide-react';
 
 interface Props {
   attraction: Attraction;
-  index: number;
+  index?: number;
+  variant?: 'list' | 'grid'; // Mode liste (classement) ou grille (catalogue)
   isDraggable?: boolean;
   onDragStart?: (index: number) => void;
   onDragEnter?: (index: number) => void;
   onDragEnd?: () => void;
-  // New props for manual sorting
   onMoveUp?: () => void;
   onMoveDown?: () => void;
+  onAdd?: () => void;     // Action pour ajouter au classement
+  onRemove?: () => void;  // Action pour retirer du classement
   isFirst?: boolean;
   isLast?: boolean;
-  // Affichage du rang personnel dans la vue globale
   myRank?: number;
 }
 
 export const AttractionCard: React.FC<Props> = ({ 
   attraction, 
-  index, 
+  index = 0, 
+  variant = 'list',
   isDraggable = false,
   onDragStart,
   onDragEnter,
   onDragEnd,
   onMoveUp,
   onMoveDown,
+  onAdd,
+  onRemove,
   isFirst = false,
   isLast = false,
   myRank
@@ -40,6 +44,13 @@ export const AttractionCard: React.FC<Props> = ({
     setImgError(false);
   }, [attraction.imageUrl]);
 
+  const handleImageError = () => {
+    if (!imgError) {
+        setImgError(true);
+        setImgSrc(`https://placehold.co/300x200/e2e8f0/64748b?text=${encodeURIComponent(attraction.name)}`);
+    }
+  };
+
   const getIntensityColor = (intensity: string) => {
     switch(intensity) {
       case 'Calme': return 'text-emerald-600 bg-emerald-50';
@@ -49,30 +60,73 @@ export const AttractionCard: React.FC<Props> = ({
     }
   };
 
+  // --- MODE GRILLE (Catalogue à ajouter) ---
+  if (variant === 'grid') {
+    return (
+      <div className="group relative bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow">
+        {/* Image Header */}
+        <div className="relative h-32 w-full overflow-hidden">
+            <img 
+                src={imgSrc} 
+                alt={attraction.name} 
+                onError={handleImageError}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-80"></div>
+            <div className="absolute bottom-2 left-3 right-3">
+                <span className="text-[10px] font-bold text-white/90 uppercase tracking-wider">{attraction.land}</span>
+                <h3 className="text-sm font-bold text-white leading-tight line-clamp-2">{attraction.name}</h3>
+            </div>
+            <button 
+                onClick={(e) => { e.stopPropagation(); onAdd?.(); }}
+                className="absolute top-2 right-2 w-8 h-8 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full flex items-center justify-center shadow-lg transform transition-transform hover:scale-110 active:scale-95"
+                title="Ajouter au classement"
+            >
+                <Plus size={18} strokeWidth={3} />
+            </button>
+        </div>
+
+        {/* Mini Infos */}
+        <div className="p-3 flex flex-col flex-grow justify-between gap-2">
+            <div className="flex gap-2 flex-wrap">
+                <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${getIntensityColor(attraction.intensity)}`}>
+                    {attraction.intensity}
+                </span>
+                {attraction.avgWait !== undefined && (
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 font-medium flex items-center gap-1">
+                        <Clock size={10} /> {attraction.avgWait} min
+                    </span>
+                )}
+            </div>
+            
+            {/* Liens discrets */}
+            <div className="flex gap-3 border-t border-slate-50 pt-2 mt-1 justify-end opacity-60 group-hover:opacity-100 transition-opacity">
+                {attraction.youtubeUrl && (
+                    <a href={attraction.youtubeUrl} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-red-500"><Youtube size={14} /></a>
+                )}
+                <a href={attraction.officialUrl} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-indigo-500"><ExternalLink size={14} /></a>
+            </div>
+        </div>
+      </div>
+    );
+  }
+
+  // --- MODE LISTE (Classement Drag & Drop) ---
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
     if (onDragStart) {
       onDragStart(index);
       e.dataTransfer.effectAllowed = "move";
+      // Petit hack pour cacher l'élément original pendant le drag (optionnel)
       setTimeout(() => {
         if (cardRef.current) cardRef.current.classList.add('opacity-40', 'scale-95');
       }, 0);
     }
   };
 
-  const handleDragEnter = () => {
-    if (onDragEnter) onDragEnter(index);
-  };
-
+  const handleDragEnter = () => { if (onDragEnter) onDragEnter(index); };
   const handleDragEnd = () => {
     if (onDragEnd) onDragEnd();
     if (cardRef.current) cardRef.current.classList.remove('opacity-40', 'scale-95');
-  };
-
-  const handleImageError = () => {
-    if (!imgError) {
-        setImgError(true);
-        setImgSrc(`https://placehold.co/150x150/e2e8f0/64748b?text=${encodeURIComponent(attraction.name.substring(0, 10))}`);
-    }
   };
 
   return (
@@ -83,114 +137,63 @@ export const AttractionCard: React.FC<Props> = ({
       onDragEnter={isDraggable ? handleDragEnter : undefined}
       onDragEnd={isDraggable ? handleDragEnd : undefined}
       onDragOver={(e) => e.preventDefault()}
-      className={`group relative flex items-start p-3 md:p-4 bg-white rounded-2xl shadow-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:z-10 ${isDraggable ? 'cursor-grab active:cursor-grabbing' : ''}`}
+      className={`group relative flex items-start p-3 bg-white rounded-xl shadow-sm border border-slate-100 transition-all duration-200 hover:shadow-md hover:border-indigo-100 ${isDraggable ? 'cursor-grab active:cursor-grabbing' : ''}`}
     >
-      {/* Drag Handle / Number */}
-      <div className="hidden md:flex absolute -left-4 top-1/2 -translate-y-1/2 w-8 text-center opacity-0 group-hover:opacity-100 transition-opacity">
-        {isDraggable ? (
-           <GripVertical className="mx-auto text-slate-300" size={20} />
-        ) : (
-           <span className="text-2xl font-black text-slate-100">{index + 1}</span>
-        )}
+      {/* Numéro / Drag Handle */}
+      <div className="flex flex-col items-center justify-center mr-3 self-center gap-1 min-w-[24px]">
+        {isDraggable && <GripVertical className="text-slate-300 group-hover:text-indigo-400" size={16} />}
+        <span className={`text-lg font-black ${myRank ? 'text-indigo-600' : 'text-slate-900'}`}>
+            {myRank ? `#${myRank}` : index + 1}
+        </span>
       </div>
 
-      {/* Image with Rank Badge */}
-      <div className="flex-shrink-0 relative mr-3 md:mr-5 mt-1">
-        <img 
-          src={imgSrc} 
-          alt={attraction.name} 
-          onError={handleImageError}
-          className="w-16 h-16 md:w-20 md:h-20 rounded-xl object-cover shadow-sm bg-slate-100 select-none pointer-events-none"
-        />
-        <div className="absolute -top-2 -left-2 w-6 h-6 bg-slate-900 text-white rounded-full flex items-center justify-center text-[10px] font-bold shadow border-2 border-white z-10">
-            {index + 1}
-        </div>
+      {/* Image Thumbnail */}
+      <div className="flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden bg-slate-100 mr-3 relative group-hover:ring-2 ring-indigo-50 transition-all">
+        <img src={imgSrc} alt={attraction.name} onError={handleImageError} className="w-full h-full object-cover" />
       </div>
 
       {/* Content */}
-      <div className="flex-grow min-w-0">
-        <div className="flex items-center mb-1 gap-2 flex-wrap">
-            <h3 className="font-bold text-slate-800 text-sm md:text-base truncate leading-tight mr-1">{attraction.name}</h3>
-            
-            {/* Liens Externes */}
-            <div className="flex items-center gap-1">
-                <a 
-                    href={attraction.officialUrl} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="p-1 rounded-md hover:bg-slate-100 text-slate-300 hover:text-indigo-600 transition-colors"
-                    title="Site officiel"
-                    onMouseDown={(e) => e.stopPropagation()}
-                    onClick={(e) => e.stopPropagation()}
-                >
-                    <ExternalLink size={14} />
-                </a>
-                <a 
-                    href={attraction.youtubeUrl} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="p-1 rounded-md hover:bg-red-50 text-red-200 hover:text-red-600 transition-colors"
-                    title="Voir sur YouTube"
-                    onMouseDown={(e) => e.stopPropagation()}
-                    onClick={(e) => e.stopPropagation()}
-                >
-                    <Youtube size={16} />
-                </a>
-            </div>
-        </div>
+      <div className="flex-grow min-w-0 self-center">
+        <h3 className="font-bold text-slate-800 text-sm leading-tight truncate">{attraction.name}</h3>
+        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">{attraction.land}</p>
         
-        <p className="text-[10px] md:text-xs text-slate-500 font-medium uppercase tracking-wider mb-2 truncate">{attraction.land}</p>
-        
-        <div className="flex flex-wrap gap-2 mb-3">
-          {attraction.avgWait && (
-             <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-slate-50 text-slate-600 text-[10px] font-semibold">
-               <Clock size={10} /> {attraction.avgWait} min
+        {/* Tags compacts */}
+        <div className="flex items-center gap-2">
+             <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold ${getIntensityColor(attraction.intensity)}`}>
+                {attraction.intensity}
              </span>
-          )}
-          <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-semibold ${getIntensityColor(attraction.intensity)}`}>
-             <Gauge size={10} /> {attraction.intensity}
-          </span>
-
-          {/* Badge "Mon Choix" si fourni */}
-          {myRank && (
-            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-indigo-50 text-indigo-700 text-[10px] font-bold border border-indigo-100">
-               <User size={10} /> Mon choix : #{myRank}
-            </span>
-          )}
-        </div>
-
-        {/* Avis Client */}
-        <div className="relative bg-slate-50 rounded-lg p-3 border border-slate-100 mt-1">
-             <div className="flex gap-3 items-start">
-                <Quote className="text-indigo-300 flex-shrink-0 mt-0.5" size={16} fill="currentColor" />
-                <p className="text-[14px] text-slate-600 leading-snug">
-                    {attraction.reviewSummary}
-                </p>
-             </div>
+             {attraction.reviewSummary && (
+                 <span className="hidden sm:inline-flex text-[9px] text-slate-400 italic border-l border-slate-200 pl-2 truncate max-w-[150px]">
+                    "{attraction.reviewSummary.substring(0, 40)}..."
+                 </span>
+             )}
         </div>
       </div>
 
-      {/* Mobile/Touch Sort Controls */}
-      {isDraggable && (
-          <div className="flex flex-col gap-1 ml-2 pl-2 border-l border-slate-50 shrink-0 self-center">
+      {/* Actions (Remove / Sort) */}
+      <div className="flex flex-col gap-1 ml-2 pl-2 border-l border-slate-50 shrink-0 self-center">
+        {onRemove && (
             <button 
-                onClick={(e) => { e.stopPropagation(); onMoveUp?.(); }} 
-                disabled={isFirst} 
-                className="p-1.5 rounded-full bg-slate-50 hover:bg-indigo-50 text-slate-400 hover:text-indigo-600 disabled:opacity-20 disabled:hover:bg-slate-50 disabled:hover:text-slate-400 transition-colors"
-                title="Monter"
+                onClick={(e) => { e.stopPropagation(); onRemove(); }}
+                className="p-1.5 rounded-lg text-slate-300 hover:bg-red-50 hover:text-red-500 transition-colors mb-1"
+                title="Retirer du classement"
             >
-                <ChevronUp size={18} />
+                <Trash2 size={16} />
             </button>
-            <button 
-                onClick={(e) => { e.stopPropagation(); onMoveDown?.(); }} 
-                disabled={isLast} 
-                className="p-1.5 rounded-full bg-slate-50 hover:bg-indigo-50 text-slate-400 hover:text-indigo-600 disabled:opacity-20 disabled:hover:bg-slate-50 disabled:hover:text-slate-400 transition-colors"
-                title="Descendre"
-            >
-                <ChevronDown size={18} />
-            </button>
-          </div>
-      )}
+        )}
+        
+        {/* Mobile Sort Buttons */}
+        {isDraggable && (
+            <div className="flex flex-col md:hidden">
+                <button onClick={(e) => { e.stopPropagation(); onMoveUp?.(); }} disabled={isFirst} className="p-1 text-slate-300 hover:text-indigo-600 disabled:opacity-10">
+                    <ChevronUp size={16} />
+                </button>
+                <button onClick={(e) => { e.stopPropagation(); onMoveDown?.(); }} disabled={isLast} className="p-1 text-slate-300 hover:text-indigo-600 disabled:opacity-10">
+                    <ChevronDown size={16} />
+                </button>
+            </div>
+        )}
+      </div>
     </div>
   );
 };

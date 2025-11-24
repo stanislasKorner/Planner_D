@@ -5,22 +5,20 @@ import { loginUser, logoutUser, getCurrentUser, subscribeToRankings, saveRanking
 import { RankingList } from './components/RankingList';
 import { GlobalResults } from './components/GlobalResults';
 import { UserProfileQuiz } from './components/UserProfileQuiz';
-import { AdminPanel } from './components/AdminPanel'; // Import du panel
-import { LogOut, Crown, Loader2, Check, Lock, UserCircle, Settings } from 'lucide-react'; // Import Settings icon
+import { AdminPanel } from './components/AdminPanel';
+import { LogOut, Crown, Loader2, Check, Lock, UserCircle, Settings } from 'lucide-react';
 
 const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
-  const [view, setView] = useState<'rank' | 'global' | 'admin'>('rank'); // Ajout view admin
+  const [view, setView] = useState<'rank' | 'global' | 'admin'>('rank');
   const [myOrder, setMyOrder] = useState<string[]>([]);
   const [allRankings, setAllRankings] = useState<UserRanking[]>([]);
   const [attractionConfigs, setAttractionConfigs] = useState<AttractionConfig[]>([]);
   const [selectedName, setSelectedName] = useState(USERS_LIST[0]);
   const [hasVoted, setHasVoted] = useState(false);
-  
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success'>('idle');
   const [showQuiz, setShowQuiz] = useState(false);
 
-  // 1. Initialize Session
   useEffect(() => {
     const currentUser = getCurrentUser();
     if (currentUser) {
@@ -29,7 +27,6 @@ const App: React.FC = () => {
     }
   }, []);
 
-  // 2. Subscribe to Global Data (Rankings + Configs Images)
   useEffect(() => {
     const unsubRankings = subscribeToRankings(setAllRankings);
     const unsubConfigs = subscribeToAttractionConfigs(setAttractionConfigs);
@@ -39,16 +36,17 @@ const App: React.FC = () => {
     };
   }, []);
 
-  // 3. Fusion des images custom (Admin) avec les données statiques
   const mergedAttractions = useMemo(() => {
     return ATTRACTIONS.map(attr => {
         const config = attractionConfigs.find(c => c.attractionId === attr.id);
-        if (config && config.customImageUrl) {
-            return { ...attr, imageUrl: config.customImageUrl };
+        let newAttr = { ...attr };
+        if (config) {
+            if (config.customImageUrl) newAttr.imageUrl = config.customImageUrl;
+            if (config.customYoutubeUrl) newAttr.youtubeUrl = config.customYoutubeUrl;
         }
-        return attr;
+        return newAttr;
     });
-  }, [attractionConfigs]); // Se recalcule quand les configs changent
+  }, [attractionConfigs]);
 
   const loadUserData = async (name: string) => {
     const myRanking = await getUserRanking(name);
@@ -79,7 +77,6 @@ const App: React.FC = () => {
   };
 
   const handleQuizSubmit = (answers: QuizAnswers) => {
-    // Utiliser mergedAttractions ici pour avoir les bonnes images si besoin
     const scoredAttractions = mergedAttractions.map(attr => {
         let score = 0;
         if (answers.attractionType === 'classic' && (attr.land === 'Fantasyland' || attr.land === 'Adventureland' || attr.intensity === 'Calme')) score += 5;
@@ -133,11 +130,7 @@ const App: React.FC = () => {
           </div>
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="relative">
-              <select 
-                className="w-full px-4 py-4 bg-white border-none rounded-2xl text-slate-900 font-bold shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none appearance-none text-center cursor-pointer hover:shadow-md transition-shadow"
-                value={selectedName}
-                onChange={(e) => setSelectedName(e.target.value)}
-              >
+              <select className="w-full px-4 py-4 bg-white border-none rounded-2xl text-slate-900 font-bold shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none appearance-none text-center cursor-pointer hover:shadow-md transition-shadow" value={selectedName} onChange={(e) => setSelectedName(e.target.value)}>
                 {USERS_LIST.map(name => (
                   <option key={name} value={name}>{name}</option>
                 ))}
@@ -170,9 +163,8 @@ const App: React.FC = () => {
             <div className="bg-indigo-800 p-1 rounded-full flex items-center border border-indigo-700">
                <button onClick={() => setView('rank')} className={`px-4 py-2 rounded-full text-xs sm:text-sm font-bold transition-all ${view === 'rank' ? 'bg-white shadow-sm text-indigo-900' : 'text-indigo-200 hover:text-white'}`}>Mon Vote</button>
                <button onClick={() => setView('global')} className={`px-4 py-2 rounded-full text-xs sm:text-sm font-bold transition-all ${view === 'global' ? 'bg-white shadow-sm text-indigo-900' : 'text-indigo-200 hover:text-white'}`}>Résultats</button>
-               {/* BOUTON ADMIN POUR RAPHAEL */}
                {user.name === 'Raphaël' && (
-                   <button onClick={() => setView('admin')} className={`px-3 py-2 rounded-full text-xs sm:text-sm font-bold transition-all ${view === 'admin' ? 'bg-white shadow-sm text-indigo-900' : 'text-indigo-200 hover:text-white'}`}>
+                   <button onClick={() => setView('admin')} className={`px-3 py-2 rounded-full text-xs sm:text-sm font-bold transition-all ${view === 'admin' ? 'bg-white shadow-sm text-indigo-900' : 'text-indigo-200 hover:text-white'}`} title="Admin">
                        <Settings size={16} />
                    </button>
                )}
@@ -214,7 +206,6 @@ const App: React.FC = () => {
             )
         )}
 
-        {/* VUE ADMIN */}
         {view === 'admin' && user.name === 'Raphaël' && (
             <AdminPanel attractions={mergedAttractions} />
         )}
