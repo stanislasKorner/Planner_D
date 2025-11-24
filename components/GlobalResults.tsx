@@ -22,7 +22,6 @@ export const GlobalResults: React.FC<Props> = ({ attractions, allRankings, curre
   const [showResetModal, setShowResetModal] = useState(false);
   const [hoveredAttractionId, setHoveredAttractionId] = useState<string | null>(null);
 
-  // --- CALCUL DES VOTANTS ---
   const votersList = useMemo(() => {
     const votedNames = allRankings.map(r => r.userName);
     const hasVoted = USERS_LIST.filter(u => votedNames.includes(u));
@@ -56,9 +55,7 @@ export const GlobalResults: React.FC<Props> = ({ attractions, allRankings, curre
     }
   }, [activeTab, topForAI, optimizedPath.length, isLoadingAI]);
 
-  const openResetModal = () => {
-    setShowResetModal(true);
-  };
+  const openResetModal = () => { setShowResetModal(true); };
 
   const confirmReset = async () => {
     try {
@@ -102,7 +99,6 @@ export const GlobalResults: React.FC<Props> = ({ attractions, allRankings, curre
 
   return (
     <div className="max-w-6xl mx-auto pb-20 pt-4 relative">
-        {/* VOTERS LIST */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
             <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-4">
                 <div className="flex items-center gap-2 mb-2 text-emerald-800 font-bold text-sm uppercase tracking-wide">
@@ -147,7 +143,18 @@ export const GlobalResults: React.FC<Props> = ({ attractions, allRankings, curre
             <div className="space-y-5 max-w-2xl mx-auto">
                 {globalRanking.map((attraction, index) => {
                     const myRank = myOrder.indexOf(attraction.id) + 1;
-                    return <AttractionCard key={attraction.id} attraction={attraction} index={index} isDraggable={false} myRank={myRank > 0 ? myRank : undefined} />;
+                    const topOneVoters = allRankings.filter(r => r.rankedAttractionIds[0] === attraction.id).map(r => r.userName);
+                    return (
+                        <AttractionCard 
+                            key={attraction.id} 
+                            attraction={attraction} 
+                            index={index} 
+                            isDraggable={false} 
+                            myRank={myRank > 0 ? myRank : undefined}
+                            topOneCount={topOneVoters.length}
+                            topOneVoters={topOneVoters}
+                        />
+                    );
                 })}
             </div>
         )}
@@ -170,21 +177,6 @@ export const GlobalResults: React.FC<Props> = ({ attractions, allRankings, curre
                 </div>
                 <div className="lg:col-span-8 h-full rounded-3xl overflow-hidden shadow-sm border border-slate-100 bg-slate-50">
                      <MapVisualization path={optimizedPath.length > 0 ? optimizedPath : topForAI.map(a => a.id)} attractions={attractions} hoveredId={hoveredAttractionId} />
-                </div>
-            </div>
-        )}
-        
-        {/* Reset Modal (Admin) */}
-        {showResetModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={() => setShowResetModal(false)}></div>
-                <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200 p-6">
-                    <h3 className="text-xl font-black text-center text-slate-900 mb-2">Zone de Danger</h3>
-                    <p className="text-center text-slate-500 text-sm mb-6">Tout effacer ?</p>
-                    <div className="flex gap-3">
-                        <button onClick={() => setShowResetModal(false)} className="flex-1 py-3 rounded-xl font-bold text-slate-700 bg-slate-100 hover:bg-slate-200">Annuler</button>
-                        <button onClick={confirmReset} disabled={isResetting} className="flex-1 py-3 rounded-xl font-bold text-white bg-red-600 hover:bg-red-700">{isResetting ? '...' : 'Oui'}</button>
-                    </div>
                 </div>
             </div>
         )}

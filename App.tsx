@@ -6,7 +6,7 @@ import { RankingList } from './components/RankingList';
 import { GlobalResults } from './components/GlobalResults';
 import { UserProfileQuiz } from './components/UserProfileQuiz';
 import { AdminPanel } from './components/AdminPanel';
-import { LogOut, Crown, Loader2, Check, Lock, UserCircle, Settings } from 'lucide-react';
+import { LogOut, Crown, Loader2, Check, Lock, UserCircle, Settings, AlertCircle } from 'lucide-react';
 
 const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -40,6 +40,7 @@ const App: React.FC = () => {
     return ATTRACTIONS.map(attr => {
         const config = attractionConfigs.find(c => c.attractionId === attr.id);
         let newAttr = { ...attr };
+        
         if (config) {
             if (config.customImageUrl) newAttr.imageUrl = config.customImageUrl;
             if (config.customYoutubeUrl) newAttr.youtubeUrl = config.customYoutubeUrl;
@@ -77,29 +78,17 @@ const App: React.FC = () => {
   };
 
   const handleQuizSubmit = (answers: QuizAnswers) => {
-    const scoredAttractions = mergedAttractions.map(attr => {
-        let score = 0;
-        if (answers.attractionType === 'classic' && (attr.land === 'Fantasyland' || attr.land === 'Adventureland' || attr.intensity === 'Calme')) score += 5;
-        if (answers.attractionType === 'adventure' && (attr.land === 'Frontierland' || attr.name.includes('Star'))) score += 5;
-        if (answers.attractionType === 'thrill' && (attr.intensity === 'Sensations fortes')) score += 10;
-        if (answers.attractionType === 'story' && (attr.intensity === 'Modéré' || attr.intensity === 'Calme')) score += 3;
-        if (answers.adrenalineLevel === 'chill' && attr.intensity === 'Calme') score += 8;
-        if (answers.adrenalineLevel === 'medium' && attr.intensity === 'Modéré') score += 8;
-        if (answers.adrenalineLevel === 'fast' && (attr.intensity === 'Sensations fortes' || attr.intensity === 'Modéré')) score += 5;
-        if (answers.adrenalineLevel === 'extreme' && attr.intensity === 'Sensations fortes') score += 10;
-        if (answers.avoidance === 'heights' && (attr.name.includes('Orbitron') || attr.name.includes('Robinson'))) score -= 10;
-        if (answers.avoidance === 'loops' && (attr.name.includes('Indiana') || attr.name.includes('Hyperspace'))) score -= 20;
-        if (answers.avoidance === 'dark' && (attr.name.includes('Phantom') || attr.name.includes('Pirates') || attr.land === 'Fantasyland')) score -= 5;
-        return { id: attr.id, score };
-    });
-    scoredAttractions.sort((a, b) => b.score - a.score);
-    const newOrder = scoredAttractions.map(a => a.id);
-    setMyOrder(newOrder);
     setShowQuiz(false);
   };
 
   const handleSaveRanking = async () => {
     if (!user) return;
+    
+    if (myOrder.length < ATTRACTIONS.length) {
+        alert(`Il reste ${ATTRACTIONS.length - myOrder.length} attractions à classer !`);
+        return;
+    }
+
     setSaveStatus('saving');
     const ranking: UserRanking = {
       userName: user.name,
@@ -146,6 +135,8 @@ const App: React.FC = () => {
     );
   }
 
+  const isComplete = myOrder.length === ATTRACTIONS.length;
+
   return (
     <div className="min-h-screen bg-[#FAFAFA] font-sans selection:bg-indigo-100">
       {showQuiz && <UserProfileQuiz onSubmit={handleQuizSubmit} />}
@@ -181,13 +172,25 @@ const App: React.FC = () => {
         {view === 'rank' && (
           <>
             <RankingList attractions={mergedAttractions} currentOrder={myOrder} onUpdateOrder={setMyOrder} />
-            <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40">
-                <button id="save-btn" onClick={handleSaveRanking} disabled={saveStatus === 'saving' || saveStatus === 'success'} className={`flex items-center gap-2 px-8 py-4 rounded-full font-bold shadow-2xl transition-all active:scale-95 disabled:opacity-100 disabled:cursor-default ${saveStatus === 'success' ? 'bg-emerald-500 text-white shadow-emerald-200' : 'bg-slate-900 text-white shadow-slate-400 hover:bg-black'}`}>
-                    {saveStatus === 'saving' && <Loader2 className="animate-spin" size={20} />}
-                    {saveStatus === 'success' && <Check size={20} />}
-                    {saveStatus === 'idle' && 'Sauvegarder mes choix'}
-                    {saveStatus === 'saving' && 'Sauvegarde...'}
-                    {saveStatus === 'success' && 'Sauvegardé !'}
+            
+            <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 w-full max-w-xs px-4">
+                <button 
+                    id="save-btn" 
+                    onClick={handleSaveRanking} 
+                    disabled={saveStatus === 'saving' || saveStatus === 'success'} 
+                    className={`w-full flex items-center justify-center gap-2 px-6 py-4 rounded-full font-bold shadow-2xl transition-all active:scale-95
+                        ${!isComplete 
+                            ? 'bg-slate-800 text-slate-300 cursor-not-allowed opacity-90' 
+                            : saveStatus === 'success' ? 'bg-emerald-500 text-white' : 'bg-indigo-600 hover:bg-indigo-700 text-white'
+                        }
+                    `}
+                >
+                    {saveStatus === 'saving' ? <Loader2 className="animate-spin" size={20} /> : 
+                     saveStatus === 'success' ? <Check size={20} /> : 
+                     !isComplete ? <AlertCircle size={20} className="text-amber-400" /> : null}
+                    
+                    {saveStatus === 'success' ? 'Sauvegardé !' : 
+                     !isComplete ? `Reste ${ATTRACTIONS.length - myOrder.length} à classer` : 'Valider mon classement'}
                 </button>
             </div>
           </>

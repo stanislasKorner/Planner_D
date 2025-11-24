@@ -67,7 +67,7 @@ export const ATTRACTIONS: Attraction[] = [
     x: 50, 
     y: 90,
     description: "Faites le tour du Parc Disneyland à bord d'un train à vapeur authentique pour une vue panoramique relaxante.",
-    imageUrl: 'https://images.unsplash.com/photo-1562101884-392f53523816?auto=format&fit=crop&w=800&q=80', 
+    imageUrl: 'https://images.unsplash.com/photo-1562101884-392f53523816?auto=format&fit=crop&w=800&q=80',
     intensity: 'Calme',
     officialUrl: 'https://www.disneylandparis.com/fr-fr/attractions/parc-disneyland/disneyland-railroad/',
     youtubeUrl: 'https://www.youtube.com/watch?v=8K4y_Yq0y_4',

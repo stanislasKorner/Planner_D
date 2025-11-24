@@ -1,8 +1,6 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { Attraction, OptimizationResult } from '../types';
 
-// Initialize AI client
-// The API key availability is handled by the environment.
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export const optimizeItinerary = async (
@@ -12,23 +10,29 @@ export const optimizeItinerary = async (
     const model = 'gemini-2.5-flash';
 
     const attractionListString = topAttractions
-      .map(a => `- ${a.name} (ID: ${a.id}, Park: ${a.park}, Land: ${a.land}, Coords: [${a.x}, ${a.y}])`)
+      .map(a => `- ${a.name} (ID: ${a.id}, Land: ${a.land}, X: ${a.x}, Y: ${a.y})`)
       .join('\n');
 
     const prompt = `
-      You are a Disneyland Paris logistics expert. 
-      I have a list of the group's TOP voted attractions for Disneyland Park.
-      Please create an optimized walking path to visit these attractions efficiently.
+      You are an expert guide for Disneyland Paris.
+      Goal: Create the most efficient walking path to visit these 15 attractions.
       
-      Consider:
-      1. Start generally from Main Street USA (Entrance).
-      2. Minimize walking distance between lands (Main Street -> Frontierland/Discoveryland -> Adventureland -> Fantasyland loop).
-      3. Group attractions by Land to avoid zig-zagging across the park.
+      CRITICAL GEOGRAPHY RULES (Disneyland Paris):
+      1. Entrance is Main Street USA (South).
+      2. From Main Street, usual flow is counter-clockwise: Frontierland -> Adventureland -> Fantasyland -> Discoveryland.
+      3. OR Clockwise: Discoveryland -> Fantasyland -> Adventureland -> Frontierland.
+      4. DO NOT jump back and forth between lands (e.g. Frontierland to Discoveryland then back to Adventureland). Finish one land before moving to the next.
       
-      Attractions:
+      Attractions to visit:
       ${attractionListString}
 
-      Return the result strictly as JSON containing only the optimized path.
+      Instructions:
+      - Reorder the list to minimize walking distance.
+      - Group attractions by Land.
+      - Start with attractions in Main Street or the first land (Frontierland or Discoveryland).
+      
+      Return strictly JSON:
+      { "path": ["id1", "id2", ...] }
     `;
 
     const response = await ai.models.generateContent({
@@ -42,7 +46,7 @@ export const optimizeItinerary = async (
             path: {
               type: Type.ARRAY,
               items: { type: Type.STRING },
-              description: "Array of Attraction IDs in the optimized order"
+              description: "Ordered list of attraction IDs"
             }
           },
           required: ["path"]
@@ -51,15 +55,12 @@ export const optimizeItinerary = async (
     });
 
     const resultText = response.text;
-    if (!resultText) {
-        throw new Error("Empty response from AI");
-    }
+    if (!resultText) throw new Error("Empty response from AI");
     
     return JSON.parse(resultText) as OptimizationResult;
 
   } catch (error) {
     console.error("Optimization failed", error);
-    // Fallback: just return original order if AI fails
     return {
       path: topAttractions.map(a => a.id)
     };

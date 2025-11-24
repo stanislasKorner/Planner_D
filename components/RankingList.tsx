@@ -1,8 +1,8 @@
-import React, { useState, useRef, useMemo } from 'react';
-import { Attraction } from '../types';
+import React, { useState, useRef, useMemo, useEffect } from 'react';
+import { Attraction, Intensity } from '../types';
 import { AttractionCard } from './AttractionCard';
 import { WeatherWidget } from './WeatherWidget';
-import { Search, LayoutGrid, ListOrdered, ArrowRight, Check, Sparkles } from 'lucide-react';
+import { Search, LayoutGrid, ListOrdered, ArrowRight, Check, Sparkles, ArrowUpDown, X, PlusCircle } from 'lucide-react';
 
 interface Props {
   attractions: Attraction[];
@@ -10,47 +10,76 @@ interface Props {
   onUpdateOrder: (newOrder: string[]) => void;
 }
 
+type IntensityFilter = 'all' | Intensity;
+type SortOrder = 'asc' | 'desc';
+
+const INTENSITY_ORDER: Record<Intensity, number> = {
+    'Calme': 1,
+    'Modéré': 2,
+    'Sensations fortes': 3
+};
+
 export const RankingList: React.FC<Props> = ({ attractions, currentOrder, onUpdateOrder }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeTab, setActiveTab] = useState<'catalog' | 'ranking'>('ranking'); // Mobile tab state
+  const [activeTab, setActiveTab] = useState<'catalog' | 'ranking'>('catalog');
+  const [filterIntensity, setFilterIntensity] = useState<IntensityFilter>('all');
+  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+  
   const dragItem = useRef<number | null>(null);
 
-  // Séparer les attractions classées des non classées
+  // --- LOGIC ---
+
+  // Catalogue (Gauche) : Attractions NON classées
+  const unrankedAttractions = useMemo(() => {
+    let result = attractions.filter(a => !currentOrder.includes(a.id));
+
+    // Filtres
+    result = result.filter(a => {
+        const matchesSearch = a.name.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesIntensity = filterIntensity === 'all' || a.intensity === filterIntensity;
+        return matchesSearch && matchesIntensity;
+    });
+
+    // Tri
+    result.sort((a, b) => {
+        const scoreA = INTENSITY_ORDER[a.intensity];
+        const scoreB = INTENSITY_ORDER[b.intensity];
+        return sortOrder === 'asc' ? scoreA - scoreB : scoreB - scoreA;
+    });
+
+    return result;
+  }, [attractions, currentOrder, searchTerm, filterIntensity, sortOrder]);
+
+  // Classement (Droite) : Attractions DÉJÀ classées (dans l'ordre)
   const rankedAttractions = useMemo(() => 
     currentOrder.map(id => attractions.find(a => a.id === id)).filter((a): a is Attraction => !!a),
   [currentOrder, attractions]);
 
-  const unrankedAttractions = useMemo(() => 
-    attractions.filter(a => !currentOrder.includes(a.id))
-      .filter(a => a.name.toLowerCase().includes(searchTerm.toLowerCase()) || a.land.toLowerCase().includes(searchTerm.toLowerCase())),
-  [attractions, currentOrder, searchTerm]);
-
   // --- ACTIONS ---
 
   const addToRanking = (id: string) => {
-    const newOrder = [...currentOrder, id];
-    onUpdateOrder(newOrder);
-    // Sur mobile, petite notif ou feedback visuel ?
+    onUpdateOrder([...currentOrder, id]);
+  };
+
+  const addAllFiltered = () => {
+      const idsToAdd = unrankedAttractions.map(a => a.id);
+      onUpdateOrder([...currentOrder, ...idsToAdd]);
   };
 
   const removeFromRanking = (id: string) => {
-    const newOrder = currentOrder.filter(itemId => itemId !== id);
-    onUpdateOrder(newOrder);
+    onUpdateOrder(currentOrder.filter(itemId => itemId !== id));
   };
 
   const handleDragStart = (index: number) => { dragItem.current = index; };
-  
   const handleDragEnter = (index: number) => {
     if (dragItem.current !== null && dragItem.current !== index) {
       const newOrder = [...currentOrder];
-      const draggedItemContent = newOrder[dragItem.current];
-      newOrder.splice(dragItem.current, 1);
-      newOrder.splice(index, 0, draggedItemContent);
+      const item = newOrder.splice(dragItem.current, 1)[0];
+      newOrder.splice(index, 0, item);
       onUpdateOrder(newOrder);
       dragItem.current = index;
     }
   };
-
   const handleDragEnd = () => { dragItem.current = null; };
 
   const handleMoveUp = (index: number) => {
@@ -67,134 +96,115 @@ export const RankingList: React.FC<Props> = ({ attractions, currentOrder, onUpda
     onUpdateOrder(newOrder);
   };
 
-  // --- RENDER HELPERS ---
-
-  const progressPercentage = Math.round((rankedAttractions.length / attractions.length) * 100);
+  const toggleSort = () => setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
 
   return (
-    <div className="w-full max-w-6xl mx-auto pt-2">
-      {/* Weather & Header */}
-      <div className="max-w-2xl mx-auto">
-        <WeatherWidget />
-      </div>
+    <div className="w-full max-w-7xl mx-auto pt-2 space-y-6">
+      <div className="max-w-2xl mx-auto"><WeatherWidget /></div>
 
-      {/* Mobile Tabs Controller */}
-      <div className="md:hidden sticky top-[64px] z-30 bg-[#FAFAFA]/95 backdrop-blur pb-4">
-        <div className="flex p-1 bg-white border border-slate-200 rounded-xl shadow-sm mb-4">
-            <button 
-                onClick={() => setActiveTab('catalog')}
-                className={`flex-1 py-2.5 text-sm font-bold rounded-lg flex items-center justify-center gap-2 transition-all ${activeTab === 'catalog' ? 'bg-slate-900 text-white shadow-md' : 'text-slate-500'}`}
-            >
-                <LayoutGrid size={16} /> Catalogue
-                {unrankedAttractions.length > 0 && <span className="bg-slate-700 text-white text-[9px] px-1.5 py-0.5 rounded-full">{unrankedAttractions.length}</span>}
+      {/* --- MOBILE TABS --- */}
+      <div className="md:hidden sticky top-[64px] z-30 bg-[#FAFAFA]/95 backdrop-blur pb-2">
+        <div className="flex p-1 bg-white border border-slate-200 rounded-xl shadow-sm">
+            <button onClick={() => setActiveTab('catalog')} className={`flex-1 py-2.5 text-sm font-bold rounded-lg flex items-center justify-center gap-2 transition-all ${activeTab === 'catalog' ? 'bg-slate-900 text-white shadow-md' : 'text-slate-500'}`}>
+                <LayoutGrid size={16} /> Catalogue <span className="bg-slate-700 text-white text-[9px] px-1.5 py-0.5 rounded-full">{unrankedAttractions.length}</span>
             </button>
-            <button 
-                onClick={() => setActiveTab('ranking')}
-                className={`flex-1 py-2.5 text-sm font-bold rounded-lg flex items-center justify-center gap-2 transition-all ${activeTab === 'ranking' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500'}`}
-            >
-                <ListOrdered size={16} /> Mon Classement
-                <span className="bg-white/20 text-white text-[10px] px-1.5 py-0.5 rounded-full">{rankedAttractions.length}</span>
+            <button onClick={() => setActiveTab('ranking')} className={`flex-1 py-2.5 text-sm font-bold rounded-lg flex items-center justify-center gap-2 transition-all ${activeTab === 'ranking' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500'}`}>
+                <ListOrdered size={16} /> Mon Top <span className="bg-white/20 px-1.5 rounded-full text-[10px]">{rankedAttractions.length}</span>
             </button>
         </div>
-        
-        {/* Progress Bar (Mobile) */}
-        {activeTab === 'ranking' && (
-            <div className="px-1">
-                <div className="flex justify-between text-xs font-bold text-slate-500 mb-1">
-                    <span>Progression</span>
-                    <span>{rankedAttractions.length} / {attractions.length}</span>
-                </div>
-                <div className="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden">
-                    <div className="h-full bg-indigo-500 transition-all duration-500" style={{ width: `${progressPercentage}%` }}></div>
-                </div>
-            </div>
-        )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
         
-        {/* LEFT COLUMN: CATALOG (Desktop: Col 1-7, Mobile: Visible if activeTab='catalog') */}
+        {/* --- COLONNE GAUCHE : CATALOGUE (À CHOISIR) --- */}
         <div className={`md:col-span-7 ${activeTab === 'catalog' ? 'block' : 'hidden md:block'}`}>
-            <div className="sticky top-[80px] z-20 bg-[#FAFAFA] pb-4 pt-2">
-                <h2 className="text-xl font-black text-slate-900 mb-3 flex items-center gap-2">
-                    <Sparkles className="text-amber-400 fill-amber-400" /> 
-                    Attractions disponibles
-                </h2>
+            <div className="sticky top-[80px] z-20 bg-[#FAFAFA] pb-4 pt-2 space-y-3">
                 
+                {/* Search Bar */}
                 <div className="relative shadow-sm group">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Search className="h-4 w-4 text-slate-400" />
-                    </div>
-                    <input 
-                        type="text"
-                        placeholder="Rechercher (Pirates, Space Mountain...)"
-                        className="block w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><Search className="h-4 w-4 text-slate-400" /></div>
+                    <input type="text" placeholder="Rechercher dans le catalogue..." className="block w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-900 focus:ring-2 focus:ring-indigo-500/20 outline-none" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                </div>
+
+                {/* Filtres & Tri */}
+                <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+                    <select 
+                        className={`px-3 py-2 rounded-lg text-xs font-bold border outline-none cursor-pointer appearance-none ${filterIntensity !== 'all' ? 'bg-indigo-50 border-indigo-200 text-indigo-700' : 'bg-white border-slate-200 text-slate-600'}`}
+                        value={filterIntensity}
+                        onChange={(e) => setFilterIntensity(e.target.value as IntensityFilter)}
+                    >
+                        <option value="all">Toutes intensités</option>
+                        <option value="Calme">🟢 Calme</option>
+                        <option value="Modéré">🟠 Modéré</option>
+                        <option value="Sensations fortes">🔴 Sensations fortes</option>
+                    </select>
+
+                    <button onClick={toggleSort} className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-50 transition-colors whitespace-nowrap">
+                        <ArrowUpDown size={14} /> {sortOrder === 'asc' ? 'Calme → Fort' : 'Fort → Calme'}
+                    </button>
+
+                    {unrankedAttractions.length > 0 && (
+                        <button onClick={addAllFiltered} className="flex items-center gap-1 px-3 py-2 rounded-lg bg-emerald-50 text-emerald-600 border border-emerald-100 text-xs font-bold hover:bg-emerald-100 transition-colors whitespace-nowrap ml-auto">
+                            <PlusCircle size={14} /> Tout ajouter
+                        </button>
+                    )}
                 </div>
             </div>
 
-            {unrankedAttractions.length === 0 ? (
-                <div className="flex flex-col items-center justify-center p-10 text-center bg-white rounded-2xl border border-dashed border-slate-200">
-                    <Check className="w-10 h-10 text-emerald-400 mb-2" />
-                    <p className="text-slate-500 font-medium">Toutes les attractions sont classées !</p>
-                </div>
-            ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 pb-32">
-                    {unrankedAttractions.map(attraction => (
-                        <div key={attraction.id} className="h-full">
-                            <AttractionCard 
-                                attraction={attraction} 
-                                variant="grid"
-                                onAdd={() => addToRanking(attraction.id)}
-                            />
-                        </div>
-                    ))}
-                </div>
-            )}
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 pb-32">
+                {unrankedAttractions.map(attr => (
+                    <div key={attr.id} className="h-full animate-in fade-in zoom-in duration-300">
+                        <AttractionCard attraction={attr} variant="grid" onAdd={() => addToRanking(attr.id)} />
+                    </div>
+                ))}
+                
+                {unrankedAttractions.length === 0 && (
+                    <div className="col-span-full py-12 text-center text-slate-400 bg-white rounded-xl border border-dashed border-slate-200 flex flex-col items-center justify-center">
+                        {searchTerm || filterIntensity !== 'all' ? (
+                            <>
+                                <Search className="w-8 h-8 mb-2 opacity-20" />
+                                <p>Aucun résultat pour ces filtres.</p>
+                                <button onClick={() => {setSearchTerm(''); setFilterIntensity('all')}} className="mt-2 text-indigo-500 text-xs underline">Effacer les filtres</button>
+                            </>
+                        ) : (
+                            <>
+                                <Check className="w-10 h-10 mb-2 text-emerald-400" />
+                                <p className="font-bold text-slate-600">Tout est classé !</p>
+                                <p className="text-xs mt-1">Utilise la colonne de droite pour organiser ton top.</p>
+                            </>
+                        )}
+                    </div>
+                )}
+            </div>
         </div>
 
-        {/* RIGHT COLUMN: RANKING (Desktop: Col 8-12, Sticky) */}
+        {/* --- COLONNE DROITE : CLASSEMENT (MON PANIER) --- */}
         <div className={`md:col-span-5 ${activeTab === 'ranking' ? 'block' : 'hidden md:block'}`}>
             <div className="sticky top-[80px]">
                 <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden flex flex-col max-h-[calc(100vh-100px)]">
-                    {/* Header */}
-                    <div className="bg-slate-900 text-white p-4 flex items-center justify-between shrink-0">
-                        <div>
-                            <h2 className="font-bold text-lg flex items-center gap-2">
-                                <ListOrdered size={18} /> Mon Top
-                            </h2>
-                            <p className="text-slate-400 text-xs">Glisse pour réorganiser</p>
-                        </div>
-                        <div className="text-2xl font-black text-indigo-400">
-                            {rankedAttractions.length}
-                        </div>
+                    <div className="bg-slate-900 text-white p-4 flex justify-between items-center shrink-0">
+                        <h2 className="font-bold text-lg flex gap-2 items-center"><ListOrdered size={18}/> Mon Top</h2>
+                        <span className="bg-indigo-600 text-xs font-bold px-2 py-1 rounded-md">{rankedAttractions.length}</span>
                     </div>
-
-                    {/* List */}
+                    
                     <div className="overflow-y-auto p-3 space-y-2 bg-slate-50 flex-grow min-h-[300px]">
                         {rankedAttractions.length === 0 ? (
-                            <div className="h-full flex flex-col items-center justify-center text-center text-slate-400 p-8 border-2 border-dashed border-slate-200 rounded-xl">
+                            <div className="h-full flex flex-col items-center justify-center text-slate-400 p-8 border-2 border-dashed border-slate-200 rounded-xl text-center">
                                 <ArrowRight className="w-8 h-8 mb-2 opacity-50 md:rotate-180" />
-                                <p className="text-sm">Ajoute des attractions depuis le catalogue {window.innerWidth < 768 ? "via l'onglet Catalogue" : "à gauche"} pour commencer ton classement.</p>
+                                <p className="text-xs">Clique sur <span className="font-bold text-indigo-500">+</span> à gauche pour ajouter des attractions ici.</p>
                             </div>
                         ) : (
-                            rankedAttractions.map((attraction, index) => (
+                            rankedAttractions.map((attr, index) => (
                                 <AttractionCard 
-                                    key={attraction.id}
-                                    attraction={attraction}
-                                    index={index}
-                                    variant="list"
-                                    isDraggable={true}
-                                    onDragStart={handleDragStart}
-                                    onDragEnter={handleDragEnter}
-                                    onDragEnd={handleDragEnd}
+                                    key={attr.id} attraction={attr} index={index} variant="list" 
+                                    isDraggable={true} onDragStart={handleDragStart} onDragEnter={handleDragEnter} onDragEnd={handleDragEnd} 
+                                    onRemove={() => removeFromRanking(attr.id)}
                                     onMoveUp={() => handleMoveUp(index)}
                                     onMoveDown={() => handleMoveDown(index)}
-                                    onRemove={() => removeFromRanking(attraction.id)}
                                     isFirst={index === 0}
                                     isLast={index === rankedAttractions.length - 1}
+                                    // Ajout du prop myRank pour afficher la couronne
+                                    myRank={index + 1}
                                 />
                             ))
                         )}
