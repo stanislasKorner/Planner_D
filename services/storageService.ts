@@ -4,104 +4,60 @@ import { collection, doc, setDoc, getDoc, onSnapshot, getDocs, deleteDoc } from 
 
 const COLLECTION_NAME = 'rankings';
 const CONFIG_COLLECTION = 'attractions_config';
-const APP_SETTINGS_COLLECTION = 'app_settings'; // Nouvelle collection
+const APP_SETTINGS_COLLECTION = 'app_settings';
 const CURRENT_USER_KEY = 'disney_current_user';
 
 // --- RANKINGS ---
-
 export const subscribeToRankings = (callback: (rankings: UserRanking[]) => void) => {
   const q = collection(db, COLLECTION_NAME);
-  const unsubscribe = onSnapshot(q, (querySnapshot) => {
+  return onSnapshot(q, (snapshot) => {
     const rankings: UserRanking[] = [];
-    querySnapshot.forEach((doc) => {
-      rankings.push(doc.data() as UserRanking);
-    });
+    snapshot.forEach((doc) => rankings.push(doc.data() as UserRanking));
     callback(rankings);
   });
-  return unsubscribe;
 };
 
 export const getUserRanking = async (userName: string): Promise<UserRanking | null> => {
   try {
-    const docRef = doc(db, COLLECTION_NAME, userName);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) return docSnap.data() as UserRanking;
-    return null;
-  } catch (e) {
-    console.error("Error fetching user ranking:", e);
-    return null;
-  }
+    const docSnap = await getDoc(doc(db, COLLECTION_NAME, userName));
+    return docSnap.exists() ? (docSnap.data() as UserRanking) : null;
+  } catch (e) { console.error(e); return null; }
 };
 
 export const saveRanking = async (ranking: UserRanking) => {
-  try {
-    await setDoc(doc(db, COLLECTION_NAME, ranking.userName), ranking);
-  } catch (e) {
-    console.error("Error saving ranking:", e);
-    throw e;
-  }
+  await setDoc(doc(db, COLLECTION_NAME, ranking.userName), ranking);
 };
 
 export const resetAllRankings = async () => {
-  try {
-    const q = collection(db, COLLECTION_NAME);
-    const snapshot = await getDocs(q);
-    const deletePromises = snapshot.docs.map(doc => deleteDoc(doc.ref));
-    await Promise.all(deletePromises);
-  } catch (e) {
-    console.error("Error resetting rankings:", e);
-    throw e;
-  }
+  const snapshot = await getDocs(collection(db, COLLECTION_NAME));
+  await Promise.all(snapshot.docs.map(d => deleteDoc(d.ref)));
 };
 
-// --- ADMIN CONFIG (IMAGES ATTRACTIONS) ---
-
+// --- ADMIN CONFIG (IMAGES) ---
 export const subscribeToAttractionConfigs = (callback: (configs: AttractionConfig[]) => void) => {
-  const q = collection(db, CONFIG_COLLECTION);
-  const unsubscribe = onSnapshot(q, (querySnapshot) => {
+  return onSnapshot(collection(db, CONFIG_COLLECTION), (snapshot) => {
     const configs: AttractionConfig[] = [];
-    querySnapshot.forEach((doc) => {
-      configs.push(doc.data() as AttractionConfig);
-    });
+    snapshot.forEach((doc) => configs.push(doc.data() as AttractionConfig));
     callback(configs);
   });
-  return unsubscribe;
 };
 
 export const saveAttractionConfig = async (config: AttractionConfig) => {
-  try {
-    await setDoc(doc(db, CONFIG_COLLECTION, config.attractionId), config);
-  } catch (e) {
-    console.error("Error saving attraction config:", e);
-    throw e;
-  }
+  await setDoc(doc(db, CONFIG_COLLECTION, config.attractionId), config);
 };
 
 // --- APP SETTINGS (NOM & LOGO) ---
-
 export const subscribeToAppConfig = (callback: (config: AppConfig | null) => void) => {
-  const docRef = doc(db, APP_SETTINGS_COLLECTION, 'general');
-  const unsubscribe = onSnapshot(docRef, (docSnap) => {
-    if (docSnap.exists()) {
-      callback(docSnap.data() as AppConfig);
-    } else {
-      callback(null);
-    }
+  return onSnapshot(doc(db, APP_SETTINGS_COLLECTION, 'general'), (docSnap) => {
+    callback(docSnap.exists() ? (docSnap.data() as AppConfig) : null);
   });
-  return unsubscribe;
 };
 
 export const saveAppConfig = async (config: AppConfig) => {
-  try {
-    await setDoc(doc(db, APP_SETTINGS_COLLECTION, 'general'), config);
-  } catch (e) {
-    console.error("Error saving app config:", e);
-    throw e;
-  }
+  await setDoc(doc(db, APP_SETTINGS_COLLECTION, 'general'), config);
 };
 
 // --- LOCAL STORAGE ---
-
 export const getCurrentUser = (): User | null => {
   const stored = localStorage.getItem(CURRENT_USER_KEY);
   return stored ? JSON.parse(stored) : null;

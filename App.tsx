@@ -20,7 +20,6 @@ const App: React.FC = () => {
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success'>('idle');
   const [showQuiz, setShowQuiz] = useState(false);
 
-  // 1. Initialize Session
   useEffect(() => {
     const currentUser = getCurrentUser();
     if (currentUser) {
@@ -29,14 +28,10 @@ const App: React.FC = () => {
     }
   }, []);
 
-  // 2. Subscribe to All Data
   useEffect(() => {
     const unsubRankings = subscribeToRankings((rankings) => {
         setAllRankings(rankings);
-        
-        // --- DETECTION DU RESET GLOBAL ---
-        // Si la base est vide (reset admin) ALORS QUE l'utilisateur pensait avoir voté
-        // On le force à revoter
+        // Reset auto si admin vide la base
         if (rankings.length === 0 && hasVoted) {
             setHasVoted(false);
             setMyOrder([]);
@@ -51,9 +46,9 @@ const App: React.FC = () => {
         unsubConfigs();
         unsubApp();
     };
-  }, [hasVoted]); // Dépendance à hasVoted pour réagir au changement d'état
+  }, [hasVoted]);
 
-  // 3. Update Page Title & Favicon based on Config
+  // Update Title & Favicon
   useEffect(() => {
     if (appConfig) {
         document.title = appConfig.appName;
@@ -254,7 +249,11 @@ const App: React.FC = () => {
         )}
 
         {view === 'admin' && user.name === 'Raphaël' && (
-            <AdminPanel attractions={mergedAttractions} currentAppConfig={appConfig || undefined} />
+            <AdminPanel 
+                attractions={mergedAttractions} 
+                currentAppConfig={appConfig || undefined}
+                allRankings={allRankings} 
+            />
         )}
       </main>
     </div>
